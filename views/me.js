@@ -17,6 +17,9 @@ import React, {
 } from 'react-native';
 
 import ViewPager from 'react-native-viewpager';
+
+import NormalData from './me/NormalData';//一般护肤品原料
+
 import DiscoverCell  from './discover/discover-cell';
 import DiscoverDetail from './discover/discover-detail';
 import DiscoverData from './discover/discover-data';
