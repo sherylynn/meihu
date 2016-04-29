@@ -19,7 +19,8 @@ class App extends Component {
             <Navigator
                 initialRoute={{ name: defaultName, component: defaultComponent }}
                 configureScene={(route) => {
-                    return Navigator.SceneConfigs.HorizontalSwipeJumpFromRight;
+                    //return Navigator.SceneConfigs.HorizontalSwipeJumpFromRight;
+                    return Navigator.SceneConfigs.FloatFromBottom;
                 }}
                 renderScene={(route, navigator) => {
                     let Component = route.component;
