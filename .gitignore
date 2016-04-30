@@ -38,3 +38,8 @@ server/node_modules/
 
 # vscode
 .vscode
+
+# apk
+android/app/build
+android/app/meihu.jks
+android/gradle.properties
