@@ -40,6 +40,6 @@ server/node_modules/
 .vscode
 
 # apk
+android/gradle.properties
 android/app/build
 android/app/meihu.jks
-android/gradle.properties
