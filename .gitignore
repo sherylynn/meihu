@@ -38,3 +38,9 @@ server/node_modules/
 
 # vscode
 .vscode
+
+# apk
+android/gradle.properties
+android/app/build
+android/app/meihu.jks
+.update
