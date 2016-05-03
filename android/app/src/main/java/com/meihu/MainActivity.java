@@ -1,6 +1,7 @@
 package com.meihu;
 
 import com.facebook.react.ReactActivity;
+import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
