@@ -5,7 +5,7 @@ import Markdown from 'react-native-showdown';
 
 class Example extends Component {
     render() {
-        var markdown = '# Welcome to React Native!\n\nTo get started, edit index.android.js\n\nShake or press menu button for dev menu';
+        var markdown = '# Welcome to React Native!\n\nTo get started, edit index.android.js\n\nShake or press menu button for dev menu\n百度:http://www.baidu.com';
         return <Markdown body={ markdown } />
     }
 }
