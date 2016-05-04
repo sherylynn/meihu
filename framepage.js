@@ -40,7 +40,7 @@ import RouteMe from './routeme';
 
 import Util from './views/util';
 import Service from './views/service';
-
+//暂时调整为本地获取
 
 let tabBarHidden = false;
 

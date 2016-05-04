@@ -27,9 +27,8 @@ class SearchBar extends Component {
         return (
             <View style={styles.searchBar}>
                 <Text style={{color:'#FFF', fontSize:20}}>美乎</Text>
-                <View style={styles.flowRight}>
-                    <Image source={require('../images/icon_search.png')} style={{width:15,height:15,marginRight:8}}/>
-                    <TextInput style={styles.searchInput} placeholder='Search via name or postcode'/>
+                <View>
+                    <TextInput style={styles.searchInput} placeholder='请输入检索的化妆品信息' underlineColorAndroid='transparent' />
                 </View>
             </View>
         );
@@ -97,11 +96,8 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     searchBar: {
-        //backgroundColor: '#f06292',
-        flexDirection: 'row',
-        padding: 10,
-        //justifyContent: 'center',
-        //alignItems: 'center'
+        marginTop: 65,
+        padding: 10
     },
     headerBody: {
         padding: 20,
@@ -109,17 +105,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         flexDirection: 'row'
     },
-    flowRight: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      alignSelf: 'stretch'
-    },
     searchInput: {
-        borderRadius: 8,
-        borderWidth: 1,
         height: 36,
-        fontSize: 16,
-        borderColor: '#48BBEC',
+        marginTop: 10,
+        marginBottom: 10,
+        fontSize: 18,
+        borderWidth: 1,
+        flex: 1,
+        borderRadius: 4,
+        padding: 5
     },
     container: {
         top: Platform.OS === 'android' ? 0 : 20,
