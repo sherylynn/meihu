@@ -2,9 +2,9 @@
  * Created by kenny on 16/3/28.
  */
 'use strict';
-import React, {
+import React, { Component } from 'react';
+import {
     AppRegistry,
-    Component,
     Navigator,
 } from 'react-native';
 

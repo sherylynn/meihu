@@ -5,6 +5,8 @@
 
 import React, {
     Component,
+} from 'react';
+import {
     StyleSheet,
     View,
     ScrollView,
@@ -77,17 +79,17 @@ export default class Resume extends Component {
                     <Text style={styles.caption_text}>{this.props.title}</Text>
                 </View>
                 <View style={styles.container}>
-                <View style={styles.inputRow}>
-                    <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={this._getEmail}/>
-                </View>
-                <View style={styles.inputRow}>
-                    <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={this._getPassword}/>
-                </View>
-                <View>
-                    <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
-                        <Text style={{ color: '#fff' }}>登录</Text>
-                    </TouchableHighlight>
-                </View>
+                    <View style={styles.inputRow}>
+                        <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={this._getEmail}/>
+                    </View>
+                    <View style={styles.inputRow}>
+                        <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={this._getPassword}/>
+                    </View>
+                    <View>
+                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
+                            <Text style={{ color: '#fff' }}>登录</Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -124,7 +126,7 @@ export default class Resume extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop:15,
+        paddingTop: 15,
         alignItems: 'center',
         backgroundColor: '#F5FCFF'
     },

@@ -3,8 +3,9 @@
  */
 'use strict';
 
-import React,{
-    Component,
+import React, {
+    Component, } from 'react';
+import {
     StyleSheet,
     Navigator,
     Text,
@@ -22,11 +23,11 @@ export default class RouteHome extends Component {
             initialRoute={{ name: defaultName, component: defaultComponent }}
             configureScene={(route) => {
                 return Navigator.SceneConfigs.HorizontalSwipeJump;
-            }}
-            renderScene={(route,navigator)=>{
+            } }
+            renderScene={(route, navigator) => {
                 let Component = route.component;
                 return <Component {...route.params} navigator={navigator}/>
-            }}
-        />);
+            } }
+            />);
     }
 }

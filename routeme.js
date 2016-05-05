@@ -3,8 +3,10 @@
  */
 'use strict';
 
-import React,{
+import React, {
     Component,
+} from 'react';
+import {
     Navigator,
 } from 'react-native';
 
@@ -16,15 +18,15 @@ export default class RouteMe extends Component {
         let defaultComponent = Me;
         return (
             <Navigator
-                initialRoute={{name:defaultName,component:defaultComponent}}
-                configureScene={()=>{
+                initialRoute={{ name: defaultName, component: defaultComponent }}
+                configureScene={() => {
                     return Navigator.SceneConfigs.HorizontalSwipeJumpFromRight;
-                }}
-                renderScene={(route,navigator)=>{
+                } }
+                renderScene={(route, navigator) => {
                     let Component = route.component;
                     return <Component {...route.params} navigator={navigator}/>;
-                }}
-            />
+                } }
+                />
         )
     }
 }
