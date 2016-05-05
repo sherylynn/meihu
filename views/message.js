@@ -3,9 +3,11 @@
  */
 'use strict';
 
-import React,{
-    Alert,
+import React, {
     Component,
+}from 'react';
+import {
+    Alert,
     Platform,
     StyleSheet,
     ScrollView,
@@ -16,7 +18,7 @@ import React,{
 } from 'react-native';
 export default class Message extends Component {
     _itemPress() {
-        Alert.alert( '提示', '正在开发中...', [ {text: '确定', onPress: () => console.log('OK Pressed!')} ])
+        Alert.alert('提示', '正在开发中...', [{ text: '确定', onPress: () => console.log('OK Pressed!') }])
     }
 
     render() {
@@ -25,11 +27,11 @@ export default class Message extends Component {
             <View style={styles.container}>
                 <ScrollView>
                     <TouchableHighlight
-                        onPress={() => this._itemPress()}
+                        onPress={() => this._itemPress() }
                         underlayColor={UNDERLAY_COLOR}>
                         <View>
                             <View style={styles.item_container}>
-                                <Image style={styles.thumb} source={require('../images/icon_user_info_name.png')}/>
+                                <Image style={styles.thumb} source={require('../images/icon_user_info_name.png') }/>
                                 <View style={styles.item_text_zone}>
                                     <Text style={styles.item_caption}>谁看过我</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>
@@ -40,10 +42,10 @@ export default class Message extends Component {
                     </TouchableHighlight>
                     <TouchableHighlight
                         underlayColor={UNDERLAY_COLOR}
-                        onPress={() => this._itemPress()}>
+                        onPress={() => this._itemPress() }>
                         <View>
                             <View style={styles.item_container}>
-                                <Image style={styles.thumb} source={require('../images/icon_user_info_mail.png')}/>
+                                <Image style={styles.thumb} source={require('../images/icon_user_info_mail.png') }/>
                                 <View style={styles.item_text_zone}>
                                     <Text style={styles.item_caption}>简历状态通知</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>
@@ -54,10 +56,10 @@ export default class Message extends Component {
                     </TouchableHighlight>
                     <TouchableHighlight
                         underlayColor={UNDERLAY_COLOR}
-                        onPress={() => this._itemPress()}>
+                        onPress={() => this._itemPress() }>
                         <View>
                             <View style={styles.item_container}>
-                                <Image style={styles.thumb} source={require('../images/icon_user_info_work.png')}/>
+                                <Image style={styles.thumb} source={require('../images/icon_user_info_work.png') }/>
                                 <View style={styles.item_text_zone}>
                                     <Text style={styles.item_caption}>职位邀请通知</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>

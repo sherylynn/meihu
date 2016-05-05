@@ -7,6 +7,8 @@ import React, {
     Component,
 } from 'react';
 import {
+    Platform,
+    BackAndroid,
     StyleSheet,
     View,
     ScrollView,
@@ -47,14 +49,14 @@ export default class Resume extends Component {
 
     }
     componentWillMount() {
-        if (React.Platform.OS === 'android') {
-            React.BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
+        if (Platform.OS === 'android') {
+            BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
 
     componentWillUnmount() {
-        if (React.Platform.OS === 'android') {
-            React.BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
+        if (Platform.OS === 'android') {
+            BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
 

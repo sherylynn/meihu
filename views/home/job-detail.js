@@ -7,12 +7,14 @@ import React, {
     Component,
 } from 'react';
 import {
+    Platform,
     StyleSheet,
     Navigator,
     TouchableOpacity,
     Image,
     Text,
-    View
+    View,
+    BackAndroid
 } from 'react-native';
 
 export default class JobDetail extends Component {
@@ -25,15 +27,15 @@ export default class JobDetail extends Component {
     componentWillMount() {
         console.log("3.JobDetail-componentWillMount()")
 
-        if (React.Platform.OS === 'android') {
-            React.BackAndroid.addEventListener('hardwareBackPress', ()=>this._pressButton());
+        if (Platform.OS === 'android') {
+            BackAndroid.addEventListener('hardwareBackPress', ()=>this._pressButton());
         }
     }
 
     componentWillUnmount() {
         console.log("10.JobDetail-componentWillUnmount()")
-        if (React.Platform.OS === 'android') {
-            React.BackAndroid.removeEventListener('hardwareBackPress', ()=>this._pressButton());
+        if (Platform.OS === 'android') {
+            BackAndroid.removeEventListener('hardwareBackPress', ()=>this._pressButton());
         }
     }
 

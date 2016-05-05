@@ -4,7 +4,8 @@
 'use strict';
 
 import React,{
-    Component,
+    Component,} from 'react';
+import {
     Platform,
     StyleSheet,
     ListView,
@@ -29,7 +30,7 @@ class SearchBar extends Component {
                 <Text style={{color:'#FFF', fontSize:20}}>拉勾</Text>
                 <View style={styles.searchInput}>
                     <Image source={require('../images/icon_search.png')} style={{width:25,height:25,marginRight:8}}/>
-                    <TextInput style={{color:'#14BA91',fontSize:13,flex:1,height:25}} placeholder="输入公司职位" />
+                    <TextInput style={{color:'#14BA91',fontSize:13,flex:1,height:25,underlineColorAndroid:'transparent'}} placeholder="输入公司职位" />
                 </View>
             </View>
         );
