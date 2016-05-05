@@ -10,7 +10,7 @@
     "react-native": "^0.25.1",
     "react-native-md-textinput": "^1.9.2",
     "react-native-showdown": "github:sherylynn/react-native-showdown",
-    "react-native-tab-navigator": "^0.2.17",
+    "react-native-tab-navigator": "^0.2.18",
     "react-native-update": "^1.0.3",
     "react-native-viewpager": "^0.2.1"
   }
