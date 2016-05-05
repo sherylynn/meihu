@@ -3,8 +3,8 @@
  */
 'use strict';
 
-import React,{
-    Component,} from 'react';
+import React, {
+    Component, } from 'react';
 import {
     Platform,
     StyleSheet,
@@ -27,10 +27,14 @@ class SearchBar extends Component {
     render() {
         return (
             <View style={styles.searchBar}>
-                <Text style={{color:'#FFF', fontSize:20}}>拉勾</Text>
+                <Text style={{ color: '#FFF', fontSize: 20 }}>美乎</Text>
                 <View style={styles.searchInput}>
-                    <Image source={require('../images/icon_search.png')} style={{width:25,height:25,marginRight:8}}/>
-                    <TextInput style={{color:'#14BA91',fontSize:13,flex:1,height:25,underlineColorAndroid:'transparent'}} placeholder="输入公司职位" />
+                    <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft:10}}/>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="搜索化妆品信息"
+                        placeholderTextColor='rgb(255,255,255)'
+                        underlineColorAndroid='rgba(0,0,0,0)' />
                 </View>
             </View>
         );
@@ -40,10 +44,10 @@ class SearchBar extends Component {
 let _listHeader = function (index, total, context) {
     return (
         <View style={styles.headerBody}>
-            <Image style={{width:52,height:50}} source={require('../images/icon_find_ok.png')}/>
-            <View style={{paddingLeft:20}}>
-                <Text style={{fontSize:18}}>可<Text style={{color:'#11A984'}}>直接沟通</Text>的职位推荐</Text>
-                <Text style={{marginTop:15,fontSize:13,color:'#999'}}>来和老板直接聊offer吧</Text>
+            <Image style={{ width: 52, height: 50 }} source={require('../images/icon_find_ok.png') }/>
+            <View style={{ paddingLeft: 20 }}>
+                <Text style={{ fontSize: 18 }}>可<Text style={{ color: '#11A984' }}>直接沟通</Text>的职位推荐</Text>
+                <Text style={{ marginTop: 15, fontSize: 13, color: '#999' }}>来和老板直接聊offer吧</Text>
             </View>
         </View>
     )
@@ -54,29 +58,29 @@ export default class Home extends Component {
     constructor() {
         super();
         this.state = {
-            listSource: new ListView.DataSource({rowHasChanged: (r1, r2)=>r1 !== r2})
+            listSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
                 .cloneWithRows(this._genRows({}))
         };
         // 必须绑定，否则onPress报错
         this._renderRow = this._renderRow.bind(this);
     }
 
-    _selectJob(job:Object) {
+    _selectJob(job: Object) {
         let {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'JobDetail',
                 component: JobDetail,
-                params: {job: job}
+                params: { job: job }
             });
         }
     }
 
     _renderRow(jobData) {
-        return (<JobCell onSelect={() => this._selectJob(jobData)} jobData={jobData}/>);
+        return (<JobCell onSelect={() => this._selectJob(jobData) } jobData={jobData}/>);
     }
 
-    _genRows():Array<string> {
+    _genRows(): Array<string> {
         return JobData;
     }
 
@@ -98,7 +102,7 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     searchBar: {
-        backgroundColor: '#11a984',
+        backgroundColor: '#FF679A',
         flexDirection: 'row',
         padding: 10,
         justifyContent: 'center',
@@ -112,15 +116,21 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         borderRadius: 15,
-        backgroundColor: '#0f9574',
-        paddingTop: 7,
-        paddingBottom: 7,
+        backgroundColor: '#FF84BF',
+        paddingTop: 0,
+        paddingBottom: 0,
         marginLeft: 10,
         marginRight: 10,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1
+    },
+    input: {
+        padding: 0,
+        fontSize: 15,
+        flex: 1,
+        height: 35
     },
     container: {
         top: Platform.OS === 'android' ? 0 : 20,

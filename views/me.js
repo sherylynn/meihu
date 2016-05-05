@@ -84,7 +84,7 @@ export default class Me extends Component {
     _renderPage(data){
         return(<Image source={data} style={styles.page} />)
     }
-    _pressButton(title) {
+    _pressButton= title => {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
@@ -136,7 +136,7 @@ export default class Me extends Component {
                 </View>
                 <TouchableHighlight
                     underlayColor={UNDERLAY_COLOR}
-                    onPress={this._pressButton.bind(this, '我的简历') }>
+                    onPress={()=>this._pressButton('登录') }>
                     <View>
                         <View style={styles.icon_container}>
                             <Image source={require('../images/icon_user_resume.png') } style={styles.thumb}/>
