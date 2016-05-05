@@ -44,3 +44,9 @@ android/gradle.properties
 android/app/build
 android/app/meihu.jks
 .update
+
+# BUCK
+buck-out/
+\.buckd/
+android/app/libs
+android/keystores/debug.keystore

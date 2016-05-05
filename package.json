@@ -6,7 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react-native": "^0.21.0",
+    "react": "^0.14.8",
+    "react-native": "^0.25.1",
     "react-native-md-textinput": "^1.9.2",
     "react-native-showdown": "github:sherylynn/react-native-showdown",
     "react-native-tab-navigator": "^0.2.17",
