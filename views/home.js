@@ -32,8 +32,8 @@ class SearchBar extends Component {
                     <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft:10}}/>
                     <TextInput
                         style={styles.input}
-                        placeholder="搜索化妆品信息"
-                        placeholderTextColor='rgb(255,255,255)'
+                        placeholder="输入化妆品信息"
+                        placeholderTextColor='#FFF'
                         underlineColorAndroid='rgba(0,0,0,0)' />
                 </View>
             </View>
@@ -61,8 +61,6 @@ export default class Home extends Component {
             listSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
                 .cloneWithRows(this._genRows({}))
         };
-        // 必须绑定，否则onPress报错
-        this._renderRow = this._renderRow.bind(this);
     }
 
     _selectJob(job: Object) {
@@ -76,7 +74,7 @@ export default class Home extends Component {
         }
     }
 
-    _renderRow(jobData) {
+    _renderRow=jobData=> {
         return (<JobCell onSelect={() => this._selectJob(jobData) } jobData={jobData}/>);
     }
 
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     searchInput: {
-        borderRadius: 15,
+        borderRadius: 25,
         backgroundColor: '#FF84BF',
         paddingTop: 0,
         paddingBottom: 0,
@@ -128,9 +126,11 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: 0,
+        paddingLeft:10,
         fontSize: 15,
         flex: 1,
-        height: 35
+        height: 35,
+        color:'#FFF'
     },
     container: {
         top: Platform.OS === 'android' ? 0 : 20,
