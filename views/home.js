@@ -26,9 +26,10 @@ class SearchBar extends Component {
     render() {
         return (
             <View style={styles.searchBar}>
-                <Text style={{color:'#FFF', fontSize:20}}>美乎</Text>
-                <View>
-                    <TextInput style={styles.searchInput} placeholder='请输入检索的化妆品信息' underlineColorAndroid='transparent' />
+                <Text style={{color:'#FFF', fontSize:20}}>拉勾</Text>
+                <View style={styles.searchInput}>
+                    <Image source={require('../images/icon_search.png')} style={{width:25,height:25,marginRight:8}}/>
+                    <TextInput style={{color:'#14BA91',fontSize:13,flex:1,height:25}} placeholder="输入公司职位" />
                 </View>
             </View>
         );
@@ -96,8 +97,11 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
     searchBar: {
-        marginTop: 65,
-        padding: 10
+        backgroundColor: '#11a984',
+        flexDirection: 'row',
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     headerBody: {
         padding: 20,
@@ -106,14 +110,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     searchInput: {
-        height: 36,
-        marginTop: 10,
-        marginBottom: 10,
-        fontSize: 18,
-        borderWidth: 1,
-        flex: 1,
-        borderRadius: 4,
-        padding: 5
+        borderRadius: 15,
+        backgroundColor: '#0f9574',
+        paddingTop: 7,
+        paddingBottom: 7,
+        marginLeft: 10,
+        marginRight: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        flex: 1
     },
     container: {
         top: Platform.OS === 'android' ? 0 : 20,
