@@ -46,8 +46,8 @@ let _listHeader = function (index, total, context) {
         <View style={styles.headerBody}>
             <Image style={{ width: 52, height: 50 }} source={require('../images/icon_find_ok.png') }/>
             <View style={{ paddingLeft: 20 }}>
-                <Text style={{ fontSize: 18 }}>可<Text style={{ color: '#11A984' }}>直接沟通</Text>的职位推荐</Text>
-                <Text style={{ marginTop: 15, fontSize: 13, color: '#999' }}>来和老板直接聊offer吧</Text>
+                <Text style={{ fontSize: 18 }}>可以搜索到<Text style={{ color: '#11A984' }}></Text>个相关信息</Text>
+                <Text style={{ marginTop: 15, fontSize: 13, color: '#999' }}>来丰富一下关于美丽的知识吧~</Text>
             </View>
         </View>
     )
