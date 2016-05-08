@@ -13,5 +13,13 @@ class App extends React.Component {
     );
   }
 }
+class fuck extends Component{
+  render(){
+    return(
+      <View>
+      <Text>fuck</Text></View>
+    )
+  }
+}
 
-AppRegistry.registerComponent('meihu', () => App);
+AppRegistry.registerComponent('meihu', () => fuck);

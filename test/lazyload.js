@@ -5,6 +5,7 @@ import {
     StyleSheet,
     Platform,
     Text,
+    TextInput,
     View,
     Alert,
     TouchableOpacity,
@@ -15,11 +16,13 @@ import {
     LazyloadView,
     LazyloadImage
 } from 'react-native-lazyload';
-
-import list from './NormalData.js';
+import list from './testData.js'
+//import list from './NormalData.js'
+//import list from '../views/me/NormalData.js';
 //const list = [...list data here]; // many rows
 
 class LazyloadScrollViewExample extends Component {
+    
     render() {
         return (
             <LazyloadScrollView
@@ -27,7 +30,11 @@ class LazyloadScrollViewExample extends Component {
                 contentContainerStyle={styles.content}
                 name="lazyload-list"
                 >
-                {list.map((item, i) => <View
+                <Text>{list.length}</Text>
+                <TextInput
+                 placeholder="测试筛选"
+                 style={styles.input}/>
+                {list.filter(item=>  item["功能"]=="表面活性剂").map((item, i) => <View
                     key={i}
                     style={styles.view}
                     >
@@ -40,7 +47,7 @@ class LazyloadScrollViewExample extends Component {
                         </View>
                         <View style={styles.detail}>
                             <Text style={styles.name}>{item["中文名称"]}</Text>
-                            <Text><Text style={styles.title}>功能: </Text><Text style={styles.email}>{iitem["功能"]}</Text></Text>
+                            <Text><Text style={styles.title}>功能: </Text><Text style={styles.email}>{item["功能"]}</Text></Text>
                             <Text style={styles.ip}><Text style={styles.title}>主要用途: </Text>{item["主要用途"]}</Text>
                         </View>
                     </LazyloadView>
@@ -66,6 +73,14 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: '#666'
+    },
+    input: {
+        padding: 0,
+        paddingLeft:10,
+        fontSize: 15,
+        flex: 1,
+        height: 35,
+        color:'black'
     },
     item: {
         width: 320,

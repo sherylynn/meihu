@@ -14,6 +14,11 @@ import {
     TextInput,
     View
 } from 'react-native';
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
 
 import JobCell from './home/job-cell';
 import JobDetail from './home/job-detail';
@@ -29,7 +34,7 @@ class SearchBar extends Component {
             <View style={styles.searchBar}>
                 <Text style={{ color: '#FFF', fontSize: 20 }}>美乎</Text>
                 <View style={styles.searchInput}>
-                    <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft:10}}/>
+                    <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft: 10 }}/>
                     <TextInput
                         style={styles.input}
                         placeholder="输入化妆品信息"
@@ -74,7 +79,7 @@ export default class Home extends Component {
         }
     }
 
-    _renderRow=jobData=> {
+    _renderRow = jobData => {
         return (<JobCell onSelect={() => this._selectJob(jobData) } jobData={jobData}/>);
     }
 
@@ -83,12 +88,18 @@ export default class Home extends Component {
     }
 
     render() {
+        /*
         let resultList = <ListView
             automaticallyAdjustContentInsets={false}
             dataSource={this.state.listSource}
             renderRow={this._renderRow}
             renderHeader={_listHeader}/>;
-
+        */
+        let resultList = <LazyloadScrollView
+            style={{}}
+            contentContainerStyle={{}}
+            name="result-list"
+            ></LazyloadScrollView>
         return (
             <View style={styles.container}>
                 <SearchBar />
@@ -126,11 +137,11 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: 0,
-        paddingLeft:10,
+        paddingLeft: 10,
         fontSize: 15,
         flex: 1,
         height: 35,
-        color:'#FFF'
+        color: '#FFF'
     },
     container: {
         top: Platform.OS === 'android' ? 0 : 20,

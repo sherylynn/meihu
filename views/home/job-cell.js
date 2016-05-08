@@ -13,8 +13,12 @@ import {
     TouchableHighlight,
     View,
 } from 'react-native';
-
-export default class JobCell extends Component {
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
+export default class MakeupCell extends Component {
     constructor(props) {
         super(props);
         this.state = {};
