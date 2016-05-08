@@ -4,7 +4,8 @@
 'use strict';
 
 import React, {
-    Component,
+    Component, } from 'react';
+import {
     Platform,
     View,
     ListView,
@@ -12,17 +13,29 @@ import React, {
     StyleSheet,
     ScrollView,
     Image,
+    Alert,
     TouchableHighlight,
+    TouchableOpacity,
     TextInput,
+    Linking,
 } from 'react-native';
 
+import {
+    isFirstTime,
+    isRolledBack,
+    packageVersion,
+    currentVersion,
+    checkUpdate,
+    downloadUpdate,
+    switchVersion,
+    switchVersionLater,
+    markSuccess,
+} from 'react-native-update';
+
+import _updateConfig from '../update.json';
+const {appKey} = _updateConfig[Platform.OS];
+
 import ViewPager from 'react-native-viewpager';
-
-import NormalData from './me/NormalData';//一般护肤品原料
-
-import DiscoverCell  from './discover/discover-cell';
-import DiscoverDetail from './discover/discover-detail';
-import DiscoverData from './discover/discover-data';
 
 let BANNER_IMGS = [
     require('../images/job1.jpg'),
@@ -30,16 +43,13 @@ let BANNER_IMGS = [
     require('../images/job3.jpg'),
     require('../images/job4.jpg')
 ];
+
 import Resume from './me/resume';
 import Util from './util.js'
 export default class Me extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listSource: new ListView.DataSource({rowHasChanged: (r1, r2)=>r1 !== r2})
-                .cloneWithRows(this._genRows({})),
-            pagerSource: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2})
-                .cloneWithPages(BANNER_IMGS),
             showLogin: {
                 flex: 1,
                 opacity: 1
@@ -47,6 +57,35 @@ export default class Me extends Component {
 
         };
     }
+    doUpdate = info => {
+        downloadUpdate(info).then(hash => {
+            Alert.alert('提示', '下载完毕,是否重启应用?', [
+                { text: '是', onPress: () => { switchVersion(hash); } },
+                { text: '否', },
+                { text: '下次启动时', onPress: () => { switchVersionLater(hash); } },
+            ]);
+        }).catch(err => {
+            Alert.alert('提示', '更新失败.');
+        });
+    };
+    checkUpdate = () => {
+        checkUpdate(appKey).then(info => {
+            if (info.expired) {
+                Alert.alert('提示', '您的应用版本已更新,请前往应用商店下载新的版本', [
+                    { text: '确定', onPress: () => { info.downloadUrl && Linking.openURL(info.downloadUrl) } },
+                ]);
+            } else if (info.upToDate) {
+                Alert.alert('提示', '您的应用版本已是最新.');
+            } else {
+                Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
+                    { text: '是', onPress: () => { this.doUpdate(info) } },
+                    { text: '否', },
+                ]);
+            }
+        }).catch(err => {
+            Alert.alert('提示', '更新失败.');
+        });
+    };
     _login() {
 
     }
@@ -59,32 +98,11 @@ export default class Me extends Component {
     _getPassword() {
 
     }
-    
-    _selectDiscover(discover) {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                title: discover.title,
-                component: DiscoverDetail,
-                passProps: {discover}
-            });
-        }
-    }
 
-    _renderRow(discoverData) {
-        return (
-            <DiscoverCell onSelect={() => this._selectDiscover(discoverData)} discoverData={discoverData}/>
-        );
+    _renderPage(data) {
+        return (<Image source={data} style={styles.page} />)
     }
-
-    _genRows():Array<string> {
-        return DiscoverData;
-    }
-
-    _renderPage(data){
-        return(<Image source={data} style={styles.page} />)
-    }
-    _pressButton= title => {
+    _pressButton = title => {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
@@ -99,23 +117,6 @@ export default class Me extends Component {
 
     render() {
         let UNDERLAY_COLOR = '#E8E8E8';
-        let resultList =
-            <ListView
-                dataSource={this.state.listSource}
-                renderRow={this._renderRow}
-                style={styles.listView}>
-            </ListView>;
-
-        let fuckYou=
-        <ScrollView style={styles.container}>
-            <ViewPager
-                style={{ height: 130 }}
-                renderPage={this._renderPage}
-                isLoop={true}
-                autoPlay={true}
-                dataSource={this.state.pagerSource}/>
-            {resultList}
-        </ScrollView>;
         return (
 
             <ScrollView style={styles.container}>
@@ -136,7 +137,7 @@ export default class Me extends Component {
                 </View>
                 <TouchableHighlight
                     underlayColor={UNDERLAY_COLOR}
-                    onPress={()=>this._pressButton('登录') }>
+                    onPress={() => this._pressButton('登录') }>
                     <View>
                         <View style={styles.icon_container}>
                             <Image source={require('../images/icon_user_resume.png') } style={styles.thumb}/>
@@ -175,11 +176,11 @@ export default class Me extends Component {
                         <View style={styles.separator}/>
                     </View>
                 </TouchableHighlight>
-                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this._pressButton.bind(this, '应用设置') }>
+                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this.checkUpdate}>
                     <View>
                         <View style={styles.icon_container}>
                             <Image style={styles.thumb} source={require('../images/icon_user_setting.png') }/>
-                            <Text style={styles.icon_text}>设置</Text>
+                            <Text style={styles.icon_text}>检查更新</Text>
                         </View>
                         <View style={styles.separator}/>
                     </View>
