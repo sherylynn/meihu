@@ -33,7 +33,7 @@ export default class Message extends Component {
                             <View style={styles.item_container}>
                                 <Image style={styles.thumb} source={require('../images/icon_user_info_name.png') }/>
                                 <View style={styles.item_text_zone}>
-                                    <Text style={styles.item_caption}>谁看过我</Text>
+                                    <Text style={styles.item_caption}>周边好友</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>
                                 </View>
                             </View>
@@ -47,7 +47,7 @@ export default class Message extends Component {
                             <View style={styles.item_container}>
                                 <Image style={styles.thumb} source={require('../images/icon_user_info_mail.png') }/>
                                 <View style={styles.item_text_zone}>
-                                    <Text style={styles.item_caption}>简历状态通知</Text>
+                                    <Text style={styles.item_caption}>美颜交流</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>
                                 </View>
                             </View>
@@ -61,7 +61,7 @@ export default class Message extends Component {
                             <View style={styles.item_container}>
                                 <Image style={styles.thumb} source={require('../images/icon_user_info_work.png') }/>
                                 <View style={styles.item_text_zone}>
-                                    <Text style={styles.item_caption}>职位邀请通知</Text>
+                                    <Text style={styles.item_caption}>心仪推荐</Text>
                                     <Text style={styles.no_msg_txt}>暂无新消息</Text>
                                 </View>
                             </View>

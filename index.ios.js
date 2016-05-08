@@ -9,3 +9,4 @@ import "./app-registry"; //meihu主体
 //import "./test/showdown" //测试模块 react-native-showdown
 //import "./test/md-textinput";//test react-native-md-textinput
 //import "./test/lazyload"
+//import "./test/LazyloadListExample"

@@ -15,10 +15,11 @@ import {
 } from 'react-native';
 import {
     LazyloadScrollView,
+    LazyloadListView,
     LazyloadView,
     LazyloadImage
 } from 'react-native-lazyload';
-export default class MakeupCell extends Component {
+export default class JobCell extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -27,19 +28,20 @@ export default class MakeupCell extends Component {
     render() {
         let {jobData} = this.props;
         return (
+            <LazyloadView host="listExample">
             <TouchableHighlight
                 onPress={this.props.onSelect}
                 underlayColor='#F5FCFF'>
                 <View style={{backgroundColor:'#FFF'}}>
                     <View style={{padding:10, flexDirection:'row'}}>
-                        <Image style={styles.thumb} source={{uri: jobData.logo}}/>
+                        <Image style={styles.thumb} source={require('../../images/icon_right.png') }/>
                         <View style={{flex:2, paddingLeft: 10}}>
-                            <Text style={{fontSize:16}}>{jobData.title}</Text>
-                            <Text style={{marginTop:8,marginBottom:8}}>{jobData.company}</Text>
-                            <Text style={{color: '#999'}}>{jobData.info}</Text>
+                            <Text style={{fontSize:16}}>{jobData["中文名称"]}</Text>
+                            <Text style={{marginTop:8,marginBottom:8}}>{jobData["英文名称"]}</Text>
+                            <Text style={{color: '#999'}}>{jobData["功能"]}</Text>
                         </View>
                         <View style={{flex:1, paddingLeft: 10}}>
-                            <Text style={{color: '#999', textAlign: 'right'}}>{jobData.date}</Text>
+                            <Text style={{color: '#999', textAlign: 'right'}}>{jobData["副反应"]}</Text>
                             <Text style={{marginTop:8,color:'red', textAlign: 'right'}}>{jobData.salary}</Text>
                         </View>
                     </View>
@@ -51,14 +53,15 @@ export default class MakeupCell extends Component {
                     <View style={styles.separator}/>
                 </View>
             </TouchableHighlight>
+            </LazyloadView>
         );
     }
 }
 
 const styles = StyleSheet.create({
     thumb: {
-        width: 64,
-        height: 64,
+        width: 32,
+        height: 32,
     },
     separator: {
         height: 1,

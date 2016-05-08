@@ -16,55 +16,28 @@ import {
 } from 'react-native';
 import {
     LazyloadScrollView,
+    LazyloadListView,
     LazyloadView,
     LazyloadImage
 } from 'react-native-lazyload';
 
 import JobCell from './home/job-cell';
 import JobDetail from './home/job-detail';
-import JobData from './home/job-data';
+import JobData from './me/NormalData';
 
 //从服务器获取化妆品信息
 import Util from './util';
 import Service from './service.js';
-
-class SearchBar extends Component {
-    render() {
-        return (
-            <View style={styles.searchBar}>
-                <Text style={{ color: '#FFF', fontSize: 20 }}>美乎</Text>
-                <View style={styles.searchInput}>
-                    <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft: 10 }}/>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="输入化妆品信息"
-                        placeholderTextColor='#FFF'
-                        underlineColorAndroid='rgba(0,0,0,0)' />
-                </View>
-            </View>
-        );
-    }
-}
-
-let _listHeader = function (index, total, context) {
-    return (
-        <View style={styles.headerBody}>
-            <Image style={{ width: 52, height: 50 }} source={require('../images/icon_find_ok.png') }/>
-            <View style={{ paddingLeft: 20 }}>
-                <Text style={{ fontSize: 18 }}>可以搜索到<Text style={{ color: '#11A984' }}></Text>个相关信息</Text>
-                <Text style={{ marginTop: 15, fontSize: 13, color: '#999' }}>来丰富一下关于美丽的知识吧~</Text>
-            </View>
-        </View>
-    )
-};
+const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 export default class Home extends Component {
     //构造函数可以没有参数
     constructor() {
         super();
         this.state = {
-            listSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-                .cloneWithRows(this._genRows({}))
+            keyword: "",
+            number:0
+            //dataSource: ds.cloneWithRows(JobData),
         };
     }
 
@@ -83,26 +56,51 @@ export default class Home extends Component {
         return (<JobCell onSelect={() => this._selectJob(jobData) } jobData={jobData}/>);
     }
 
+
     _genRows(): Array<string> {
         return JobData;
     }
 
+    _listHeader =(index)=> {
+    return (
+        <View style={styles.headerBody}>
+            <Image style={{ width: 52, height: 50 }} source={require('../images/icon_find_ok.png') }/>
+            <View style={{ paddingLeft: 20 }}>
+                <Text style={{ fontSize: 18 }}>可以搜索到<Text style={{ color: '#11A984' }}>{this.state.number}</Text>个相关信息</Text>
+                <Text style={{ marginTop: 15, fontSize: 13, color: '#999' }}>来丰富一下关于美丽的知识吧~</Text>
+            </View>
+        </View>
+    )
+};
+
     render() {
-        /*
-        let resultList = <ListView
+        const filterText = this.state.keyword || '';
+        const filterRegex = new RegExp(String(filterText), 'i');
+        const filter = (example) => filterRegex.test(example["中文名称"]);
+        this.state.number=JobData.filter(filter).length;
+        const dataSource = ds.cloneWithRows(JobData.filter(filter));
+        let resultList = <LazyloadListView
+            name="listExample"
             automaticallyAdjustContentInsets={false}
-            dataSource={this.state.listSource}
+            dataSource={dataSource}
             renderRow={this._renderRow}
-            renderHeader={_listHeader}/>;
-        */
-        let resultList = <LazyloadScrollView
-            style={{}}
-            contentContainerStyle={{}}
-            name="result-list"
-            ></LazyloadScrollView>
+            renderHeader={this._listHeader}/>;
+
         return (
             <View style={styles.container}>
-                <SearchBar />
+                <View style={styles.searchBar}>
+                    <Text style={{ color: '#FFF', fontSize: 20 }}>美乎</Text>
+                    <View style={styles.searchInput}>
+                        <Image source={require('../images/icon_search.png') } style={{ width: 25, height: 25, marginLeft: 10 }}/>
+                        <TextInput
+                            style={styles.input}
+                            onChangeText={(keyword) => this.setState({ keyword }) }
+                            placeholder="输入化妆品信息"
+                            placeholderTextColor='#FFF'
+                            value={this.state.keyword}
+                            underlineColorAndroid='rgba(0,0,0,0)' />
+                    </View>
+                </View>
                 {resultList}
             </View>
         );

@@ -141,7 +141,10 @@ export default class Me extends Component {
                     <View>
                         <View style={styles.icon_container}>
                             <Image source={require('../images/icon_user_resume.png') } style={styles.thumb}/>
-                            <Text style={styles.icon_text}>简历</Text>
+                            <View style={{ flex: 2, flexDirection: 'row' }}>
+                                <Text style={[{ flex: 1 }, styles.icon_text]}>登录</Text>
+                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}>即将更新</Text>
+                            </View>
                         </View>
                         <View style={styles.separator}/>
                     </View>
@@ -152,7 +155,7 @@ export default class Me extends Component {
                             <Image source={require('../images/icon_forget_password.png') } style={styles.thumb}/>
                             <View style={{ flex: 2, flexDirection: 'row' }}>
                                 <Text style={[{ flex: 1 }, styles.icon_text]}>PLUS</Text>
-                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}>已开启</Text>
+                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}></Text>
                             </View>
                         </View>
                         <View style={styles.separator}/>

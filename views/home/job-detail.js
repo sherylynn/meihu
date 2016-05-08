@@ -59,15 +59,15 @@ export default class JobDetail extends Component {
                     <TouchableOpacity onPress={()=>this._pressButton()}>
                         <Image source={require('../../images/icon_back.png')} style={{width:30,height:30}}/>
                     </TouchableOpacity>
-                    <Text style={{fontSize:17,flex:1,textAlign:'center',marginRight:30}}>职位详情</Text>
+                    <Text style={{fontSize:17,flex:1,textAlign:'center',marginRight:30}}>化妆品成分详情</Text>
                 </View>
                 <View style={{padding:15, flexDirection:'row'}}>
-                    <Text style={{flex:1}}>{job.title}</Text>
-                    <Text style={{color:'red'}}>{job.salary}</Text>
+                    <Text style={{flex:1}}>{job["中文名称"]}</Text>
+                    <Text style={{color:'red'}}>{job["主要用途"]}</Text>
                 </View>
                 <View style={{padding: 15}}>
-                    <Text style={{marginTop:8,marginBottom:8}}>{job.company}</Text>
-                    <Text style={{color: '#999'}}>{job.info}</Text>
+                    <Text style={{marginTop:8,marginBottom:8}}>{job["功能"]}</Text>
+                    <Text style={{color: '#999'}}>{job["副反应"]}</Text>
                 </View>
             </View>
         );

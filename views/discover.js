@@ -4,8 +4,7 @@
 'use strict';
 
 import React,{
-    Component,} from 'react';
-import {
+    Component,
     Platform,
     StyleSheet,
     ScrollView,
