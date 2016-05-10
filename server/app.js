@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var async = require('async');
 var routes = require('./routes/routes');
 var app = express();
+var PouchDB=require('pouchdb');
+
 
 app.set('port', 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -19,8 +21,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
+app.use('/db', require('express-pouchdb')(PouchDB));
+var shit =new PouchDB('shit')
 var server = http.createServer(app);
 server.listen(app.get('port'));
 
