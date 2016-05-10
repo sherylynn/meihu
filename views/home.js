@@ -24,6 +24,7 @@ import {
 import JobCell from './home/job-cell';
 import JobDetail from './home/job-detail';
 import JobData from './me/NormalData';
+import Top15 from './me/2015TOP5'
 
 //从服务器获取化妆品信息
 import Util from './util';
