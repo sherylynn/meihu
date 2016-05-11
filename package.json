@@ -12,6 +12,7 @@
     "react-native": "^0.25.1",
     "react-native-lazyload": "^1.0.1",
     "react-native-md-textinput": "^1.9.2",
+    "react-native-rncrypto": "0.0.2",
     "react-native-showdown": "github:sherylynn/react-native-showdown",
     "react-native-storage": "0.0.16",
     "react-native-tab-navigator": "^0.2.18",

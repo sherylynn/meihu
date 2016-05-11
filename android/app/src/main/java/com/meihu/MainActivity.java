@@ -1,6 +1,7 @@
 package com.meihu;
 
 import com.facebook.react.ReactActivity;
+import cn.jedisto.rncrypto.RNCryptoPackage;
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
 import com.facebook.react.ReactPackage;
@@ -41,6 +42,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNCryptoPackage(),
             new UpdatePackage()
         );
     }
