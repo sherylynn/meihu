@@ -35,11 +35,11 @@ npm-debug.log
 
 # server node_modules
 server/node_modules/
-server/_replicator
-server/_users
-server/shit
-server/pouch__all_dbs__
-server/log
+server/_replicator/
+server/_users/
+server/shit/
+server/pouch__all_dbs__/
+server/log*
 
 # vscode
 .vscode
