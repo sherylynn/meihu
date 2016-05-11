@@ -4,7 +4,8 @@
 'use strict';
 
 import React, {
-    Component,
+    Component, } from 'react';
+import {
     Dimensions,
     Image,
     View,
@@ -40,7 +41,7 @@ import RouteMe from './routeme';
 
 import Util from './views/util';
 import Service from './views/service';
-
+//暂时调整为本地获取
 
 let tabBarHidden = false;
 
@@ -48,7 +49,7 @@ export default class FramePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: ME_TAB,
+            selectedTab: HOME_TAB,
             tabBarShow: true
         };
         console.log("0.FramePage-constructor")
@@ -101,6 +102,10 @@ export default class FramePage extends Component {
         return (<View style={styles.container}>{renderView}</View>)
     }
 
+    componentWillMount() {
+        console.log("3.FramePage-componentWillMount()");
+    }
+
     render() {
         console.log("4.FramePage-render");
         let {tabBarShow} = this.state;
@@ -108,6 +113,7 @@ export default class FramePage extends Component {
         return (
             <View style={styles.container}>
                 <TabNavigator
+                    hidesTabTouch={false}
                     sceneStyle={{ paddingBottom: 0 }}
                     tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '首页', 0, this._createChildView(HOME_TAB)) }
@@ -149,10 +155,26 @@ export default class FramePage extends Component {
         console.log("5.FramePage-componentDidMount()");
     }
 
+    componentWillReceiveProps() {
+        console.log("6.FramePage-componentWillReceiveProps()");
+    }
 
     shouldComponentUpdate() {
         console.log("7.FramePage-shouldComponentUpdate()");
         return true;
+    }
+
+    componentWillUpdate() {
+        console.log("8.FramePage-componentWillUpdate");
+    }
+
+    componentDidUpdate() {
+        console.log("9.FramePage-componentDidUpdate");
+    }
+
+    componentWillUnmount() {
+        console.log("10.FramePage-componentWillUnmount");
+        //tabBarHidden = true;
     }
 }
 
