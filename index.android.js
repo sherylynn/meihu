@@ -8,4 +8,5 @@
 //import "./test/showdown" //测试模块 react-native-showdown
 //import "./test/md-textinput";//test react-native-md-textinput
 //import "./test/lazyload";真不容易啊
-import "./test/pouchdb";
+//import "./test/pouchdb";
+import "./test/device-id"
