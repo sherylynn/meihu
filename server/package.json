@@ -4,8 +4,8 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "babel-node src/index.js",
-    "build": "babel src --out-dir lib"
+    "start": "babel-node app-es6.js",
+    "build": "babel ./app.js --out-file ./app-es6.js"
   },
   "dependencies": {
     "async": "^1.3.0",
