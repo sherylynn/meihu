@@ -24,7 +24,6 @@
 		BA7F77671CDB4E9900F715CE /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BA7F77661CDB4E9900F715CE /* libbz2.1.0.tbd */; };
 		BA7F77691CDB4EAB00F715CE /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BA7F77681CDB4EAB00F715CE /* libz.tbd */; };
 		BACA69301CDF9CFC00E57820 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BACA69321CDF9CFC00E57820 /* InfoPlist.strings */; };
-		B8D81AA22FAA41E2A00152C8 /* librncrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCB8A01D04E46F095D55151 /* librncrypto.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -134,8 +133,6 @@
 		BACA69311CDF9CFC00E57820 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BACA69331CDF9CFF00E57820 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		BACA69341CDF9D0000E57820 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		5A4969C6A6B744F1A4CA7A36 /* rncrypto.xcodeproj */ = {isa = PBXFileReference; name = "rncrypto.xcodeproj"; path = "../node_modules/react-native-rncrypto/ios/rncrypto.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		5CCB8A01D04E46F095D55151 /* librncrypto.a */ = {isa = PBXFileReference; name = "librncrypto.a"; path = "librncrypto.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,7 +153,6 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				851E8EB2DE2C488FA0F9DC6E /* libRCTHotUpdate.a in Frameworks */,
-				B8D81AA22FAA41E2A00152C8 /* librncrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +259,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				55BCD441A981447D9F6009EF /* RCTHotUpdate.xcodeproj */,
-				5A4969C6A6B744F1A4CA7A36 /* rncrypto.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -564,7 +559,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
-					"$(SRCROOT)\..\node_modules\react-native-rncrypto\ios\rncrypto/**",
 				);
 				INFOPLIST_FILE = meihu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -574,7 +568,6 @@
 				PROVISIONING_PROFILE = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/meihu\"",
 				);
 			};
 			name = Debug;
@@ -590,7 +583,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
-					"$(SRCROOT)\..\node_modules\react-native-rncrypto\ios\rncrypto/**",
 				);
 				INFOPLIST_FILE = meihu/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -600,7 +592,6 @@
 				PROVISIONING_PROFILE = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/meihu\"",
 				);
 			};
 			name = Release;
@@ -644,7 +635,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
-					"$(SRCROOT)\..\node_modules\react-native-rncrypto\ios\rncrypto/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -686,7 +676,6 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
-					"$(SRCROOT)\..\node_modules\react-native-rncrypto\ios\rncrypto/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
