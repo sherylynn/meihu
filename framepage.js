@@ -52,7 +52,6 @@ export default class FramePage extends Component {
             selectedTab: HOME_TAB,
             tabBarShow: true
         };
-        console.log("0.FramePage-constructor")
     }
 
     _renderBadge(badgeCount) {
@@ -103,11 +102,9 @@ export default class FramePage extends Component {
     }
 
     componentWillMount() {
-        console.log("3.FramePage-componentWillMount()");
     }
 
     render() {
-        console.log("4.FramePage-render");
         let {tabBarShow} = this.state;
         console.log(tabBarShow);
         return (
@@ -117,7 +114,8 @@ export default class FramePage extends Component {
                     sceneStyle={{ paddingBottom: 0 }}
                     tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '美乎搜搜', 0, this._createChildView(HOME_TAB)) }
-                </TabNavigator>
+                    {this._renderTabItem(DISCOVER_NORMAL, DISCOVER_PRESS, DISCOVER_TAB, '发现', 0, this._createChildView(DISCOVER_TAB)) }
+                    </TabNavigator>
             </View>
         )
     }
@@ -149,28 +147,22 @@ export default class FramePage extends Component {
             key: Util.key
         }).then(console.log(data))
         */
-        console.log("5.FramePage-componentDidMount()");
     }
 
     componentWillReceiveProps() {
-        console.log("6.FramePage-componentWillReceiveProps()");
     }
 
     shouldComponentUpdate() {
-        console.log("7.FramePage-shouldComponentUpdate()");
         return true;
     }
 
     componentWillUpdate() {
-        console.log("8.FramePage-componentWillUpdate");
     }
 
     componentDidUpdate() {
-        console.log("9.FramePage-componentDidUpdate");
     }
 
     componentWillUnmount() {
-        console.log("10.FramePage-componentWillUnmount");
         //tabBarHidden = true;
     }
 }

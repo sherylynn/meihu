@@ -3,7 +3,7 @@
  */
 'use strict';
 
-import React,{
+import React, {
     Component,
 } from 'react';
 import {
@@ -29,30 +29,30 @@ export default class JobCell extends Component {
         let {jobData} = this.props;
         return (
             <LazyloadView host="listExample">
-            <TouchableHighlight
-                onPress={this.props.onSelect}
-                underlayColor='#F5FCFF'>
-                <View style={{backgroundColor:'#FFF'}}>
-                    <View style={{padding:10, flexDirection:'row'}}>
-                        <Image style={styles.thumb} source={require('../../images/icon_right.png') }/>
-                        <View style={{flex:2, paddingLeft: 10}}>
-                            <Text style={{fontSize:16}}>{jobData["中文名称"]? jobData["中文名称"]:jobData["产品名称"]}</Text>
-                            <Text style={{marginTop:8,marginBottom:8}}>{jobData["英文名称"]?jobData["英文名称"]:jobData["类别"]}</Text>
-                            <Text numberOfLines={4} style={{color: '#999'}}>{jobData["功能"]?jobData["功能"]:(jobData["成分表"]+'...')}</Text>
+                <TouchableHighlight
+                    onPress={this.props.onSelect}
+                    underlayColor='#F5FCFF'>
+                    <View style={{ backgroundColor: '#FFF' }}>
+                        <View style={{ padding: 10, flexDirection: 'row' }}>
+                            <Image style={styles.thumb} source={require('../../images/icon_right.png') }/>
+                            <View style={{ flex: 2, paddingLeft: 10 }}>
+                                <Text style={{ fontSize: 16 }}>{jobData["中文名称"] ? jobData["中文名称"] : jobData["产品名称"]}</Text>
+                                <Text style={{ marginTop: 8, marginBottom: 8 }}>{jobData["英文名称"] ? jobData["英文名称"] : jobData["类别"]}</Text>
+                                <Text numberOfLines={4} style={{ color: '#999' }}>{jobData["功能"] ? jobData["功能"] : (jobData["成分表"] + '...') }</Text>
+                            </View>
+                            <View style={{ flex: 1, paddingLeft: 10 }}>
+                                <Text style={{ color: '#999', textAlign: 'right' }}>{jobData["副反应"]}</Text>
+                                <Text style={{ marginTop: 8, color: 'red', textAlign: 'right' }}>{jobData.salary}</Text>
+                            </View>
                         </View>
-                        <View style={{flex:1, paddingLeft: 10}}>
-                            <Text style={{color: '#999', textAlign: 'right'}}>{jobData["副反应"]}</Text>
-                            <Text style={{marginTop:8,color:'red', textAlign: 'right'}}>{jobData.salary}</Text>
+                        <View style={{ padding: 10, flexDirection: 'row' }}>
+                            <Text style={styles.companyTag}>{jobData.companyPosition}</Text>
+                            <Text style={styles.companyTag}>{jobData.companyPerson}</Text>
+                            <Text style={styles.companyTag}>{jobData.companyService}</Text>
                         </View>
+                        <View style={styles.separator}/>
                     </View>
-                    <View style={{padding:10, flexDirection:'row'}}>
-                        <Text style={styles.companyTag}>{jobData.companyPosition}</Text>
-                        <Text style={styles.companyTag}>{jobData.companyPerson}</Text>
-                        <Text style={styles.companyTag}>{jobData.companyService}</Text>
-                    </View>
-                    <View style={styles.separator}/>
-                </View>
-            </TouchableHighlight>
+                </TouchableHighlight>
             </LazyloadView>
         );
     }

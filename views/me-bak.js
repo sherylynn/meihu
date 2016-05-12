@@ -170,6 +170,15 @@ export default class Me extends Component {
                         <View style={styles.separator}/>
                     </View>
                 </TouchableHighlight>
+                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this._pressButton.bind(this, '意见反馈') }>
+                    <View>
+                        <View style={styles.icon_container}>
+                            <Image style={styles.thumb} source={require('../images/icon_user_feedback.png') }/>
+                            <Text style={styles.icon_text}>反馈</Text>
+                        </View>
+                        <View style={styles.separator}/>
+                    </View>
+                </TouchableHighlight>
                 <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this.checkUpdate}>
                     <View>
                         <View style={styles.icon_container}>
