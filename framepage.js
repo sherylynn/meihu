@@ -116,8 +116,7 @@ export default class FramePage extends Component {
                     hidesTabTouch={false}
                     sceneStyle={{ paddingBottom: 0 }}
                     tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '首页', 0, this._createChildView(HOME_TAB)) }
-                    {this._renderTabItem(ME_NORMAL, ME_PRESS, ME_TAB, '我的', 0, this._createChildView(ME_TAB)) }
+                    {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '美乎搜搜', 0, this._createChildView(HOME_TAB)) }
                 </TabNavigator>
             </View>
         )

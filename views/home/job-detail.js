@@ -20,22 +20,18 @@ import {
 export default class JobDetail extends Component {
     constructor(props) {
         super(props);
-        this.state = {job: null};
-        console.log("0.JobDetail-constructor(props)")
+        this.state = { job: null };
     }
 
     componentWillMount() {
-        console.log("3.JobDetail-componentWillMount()")
-
         if (Platform.OS === 'android') {
-            BackAndroid.addEventListener('hardwareBackPress', ()=>this._pressButton());
+            BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
 
     componentWillUnmount() {
-        console.log("10.JobDetail-componentWillUnmount()")
         if (Platform.OS === 'android') {
-            BackAndroid.removeEventListener('hardwareBackPress', ()=>this._pressButton());
+            BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
 
@@ -50,24 +46,22 @@ export default class JobDetail extends Component {
     };
 
     render() {
-        console.log("4.JobDetail-render()")
         let {job} = this.props;
         return (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <View
-                    style={{padding: 10,marginTop:20,justifyContent: 'center',alignItems: 'center',flexDirection:'row'}}>
-                    <TouchableOpacity onPress={()=>this._pressButton()}>
-                        <Image source={require('../../images/icon_back.png')} style={{width:30,height:30}}/>
+                    style={{ padding: 10, marginTop: 20, justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => this._pressButton() }>
+                        <Image source={require('../../images/icon_back.png') } style={{ width: 30, height: 30 }}/>
                     </TouchableOpacity>
-                    <Text style={{fontSize:17,flex:1,textAlign:'center',marginRight:30}}>化妆品成分详情</Text>
+                    <Text style={{ fontSize: 17, flex: 1, textAlign: 'center', marginRight: 30 }}>化妆品成分详情</Text>
                 </View>
-                <View style={{padding:15, flexDirection:'row'}}>
-                    <Text style={{flex:1}}>{job["中文名称"]}</Text>
-                    <Text style={{color:'red'}}>{job["主要用途"]}</Text>
-                </View>
-                <View style={{padding: 15}}>
-                    <Text style={{marginTop:8,marginBottom:8}}>{job["功能"]}</Text>
-                    <Text style={{color: '#999'}}>{job["副反应"]}</Text>
+                <View style={{ padding: 20,}}>
+                    <Text style={{fontSize:20}}>{job["中文名称"]? "中文名："+job["中文名称"]:"产品名称："+job["产品名称"]}</Text>
+                    <Text style={{fontSize:20}}>{job["英文名称"]? "英文名："+job["英文名称"]:"类别："+job["类别"]}</Text>
+                    <Text style={{fontSize:17, marginTop: 8, marginBottom: 8 }}>{job["功能"]?"功能分类："+job["功能"]:"成分表:"+job["成分表"]}</Text>
+                    <Text style={{fontSize:17, marginTop: 8, marginBottom: 8 }}>{job["主要用途"]?"主要用途："+job["主要用途"]:""}</Text>
+                    <Text style={{ color: '#FFBCDE' }}>副反应：{job["副反应"]}</Text>
                 </View>
             </View>
         );

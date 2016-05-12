@@ -36,9 +36,9 @@ export default class JobCell extends Component {
                     <View style={{padding:10, flexDirection:'row'}}>
                         <Image style={styles.thumb} source={require('../../images/icon_right.png') }/>
                         <View style={{flex:2, paddingLeft: 10}}>
-                            <Text style={{fontSize:16}}>{jobData["中文名称"]}</Text>
-                            <Text style={{marginTop:8,marginBottom:8}}>{jobData["英文名称"]}</Text>
-                            <Text style={{color: '#999'}}>{jobData["功能"]}</Text>
+                            <Text style={{fontSize:16}}>{jobData["中文名称"]? jobData["中文名称"]:jobData["产品名称"]}</Text>
+                            <Text style={{marginTop:8,marginBottom:8}}>{jobData["英文名称"]?jobData["英文名称"]:jobData["类别"]}</Text>
+                            <Text numberOfLines={4} style={{color: '#999'}}>{jobData["功能"]?jobData["功能"]:(jobData["成分表"]+'...')}</Text>
                         </View>
                         <View style={{flex:1, paddingLeft: 10}}>
                             <Text style={{color: '#999', textAlign: 'right'}}>{jobData["副反应"]}</Text>
