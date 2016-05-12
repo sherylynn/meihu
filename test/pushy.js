@@ -45,6 +45,7 @@ class MyProject extends Component {
         {text: '下次启动时', onPress: ()=>{switchVersionLater(hash);}},
       ]);
     }).catch(err => { 
+      console.log(err);
       Alert.alert('提示', '更新失败.');
     });
   };
