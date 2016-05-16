@@ -1,3 +1,15 @@
 [Wed, 11 May 2016 08:21:44 GMT] [info] [<0.000.0>] ::1 - - GET / 200
 [Wed, 11 May 2016 08:21:45 GMT] [info] [<0.000.0>] ::1 - - GET / 200
 [Wed, 11 May 2016 08:35:37 GMT] [info] [<0.000.0>] ::1 - - GET /shit 200
+[Mon, 16 May 2016 02:26:11 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit 200
+[Mon, 16 May 2016 02:26:29 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit/ 200
+[Mon, 16 May 2016 02:26:29 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:29 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:30 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:35 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit/_all_docs?include_docs=true&attachments=true 200
+[Mon, 16 May 2016 02:26:53 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit/ 200
+[Mon, 16 May 2016 02:26:53 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:53 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:53 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - POST /shit/_bulk_docs 201
+[Mon, 16 May 2016 02:26:56 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit/_all_docs?include_docs=true&attachments=true 200
+[Mon, 16 May 2016 02:26:57 GMT] [info] [<0.000.0>] ::ffff:192.168.0.249 - - GET /shit/_all_docs?include_docs=true&attachments=true 200
