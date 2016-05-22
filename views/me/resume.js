@@ -18,8 +18,14 @@ import {
     TouchableOpacity,
     TouchableHighlight,
 } from 'react-native';
+var DeviceInfo = require('react-native-device-info');
 import ViewPager from 'react-native-viewpager';
 import Util from '../util.js'
+var Service = require('../service.js');
+import PouchDB from 'pouchdb'
+import 'pouchdb-asyncstorage-down'
+const db_remote = new PouchDB(Service['host'] + '/db/users');
+const db = new PouchDB('me', { adapter: 'asyncstorage' })
 export default class Resume extends Component {
     constructor(props) {
         super(props);
@@ -52,6 +58,13 @@ export default class Resume extends Component {
         if (Platform.OS === 'android') {
             BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
+        db.get('token').then(function (doc) {
+            
+        }).then(function (response) {
+            // handle response
+        }).catch(function (err) {
+            console.log(err);
+        });
     }
 
     componentWillUnmount() {

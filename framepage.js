@@ -114,8 +114,10 @@ export default class FramePage extends Component {
                     sceneStyle={{ paddingBottom: 0 }}
                     tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '美乎搜搜', 0, this._createChildView(HOME_TAB)) }
+                    {this._renderTabItem(MESSAGE_NORMAL, MESSAGE_PRESS, MESSAGE_TAB, '消息', 5, this._createChildView(MESSAGE_TAB)) }
                     {this._renderTabItem(DISCOVER_NORMAL, DISCOVER_PRESS, DISCOVER_TAB, '发现', 0, this._createChildView(DISCOVER_TAB)) }
-                    </TabNavigator>
+                    {this._renderTabItem(ME_NORMAL, ME_PRESS, ME_TAB, '我的', 0, this._createChildView(ME_TAB)) }
+                </TabNavigator>
             </View>
         )
     }
