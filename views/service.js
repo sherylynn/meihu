@@ -9,7 +9,8 @@ var Service = {
   getMakeup: '/makeup/get',
   addMakeup: '/makeup/add',
   updatePassword: '/user/password/update',
-  deleteUser: '/user/delete'
+  deleteUser: '/user/delete',
+  db:'/db/users'
 };
 
 module.exports = Service;

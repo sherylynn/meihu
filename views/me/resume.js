@@ -25,12 +25,14 @@ var Service = require('../service.js');
 import PouchDB from 'pouchdb'
 import 'pouchdb-asyncstorage-down'
 const db_remote = new PouchDB(Service['host'] + '/db/users');
-const db = new PouchDB('me', { adapter: 'asyncstorage' })
+const db_local = new PouchDB('me', { adapter: 'asyncstorage' })
 export default class Resume extends Component {
     constructor(props) {
         super(props);
         this.state = {
             title: null,
+            password: '',
+            email: '',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -39,11 +41,76 @@ export default class Resume extends Component {
                 flex: 1,
                 opacity: 1
             },
+            isLoadingShow: false
         };
 
     }
     _login() {
+        var email = this.state.email;
+        var password = this.state.password;
+        var path = Service.host + Service.login;
+        var that = this;
 
+        //隐藏登录页 & 加载loading
+        that.setState({
+            showLogin: {
+                height: 0,
+                width: 0,
+                flex: 0,
+            },
+            isLoadingShow: true
+        });
+        Util.post(path, {
+            email: email,
+            password: password,
+            deviceId: DeviceInfo.getUniqueID(),
+        }, function (data) {
+            if (data.status) {
+                var user = data.data;
+                //加入数据到本地
+                db_local.put({
+                    _id:'user',
+                    'username':user.username,
+                    'token': user.token,
+                    'userid': user.userid,
+                    'email': user.email,
+                }).then(
+                    function () {
+                        
+                    }
+                ).catch(function (err) {
+                    if (!err) {
+                        that.setState({
+                            showLogin: {
+                                height: 0,
+                                width: 0,
+                                flex: 0,
+                            },
+                            showIndex: {
+                                flex: 1,
+                                opacity: 1
+                            },
+                            isLoadingShow: false
+                        });
+                    }
+                });
+
+            } else {
+                AlertIOS.alert('登录', '用户名或者密码错误');
+                that.setState({
+                    showLogin: {
+                        flex: 1,
+                        opacity: 1
+                    },
+                    showIndex: {
+                        height: 0,
+                        width: 0,
+                        flex: 0,
+                    },
+                    isLoadingShow: false
+                });
+            }
+        });
     }
     _reg() {
 
@@ -59,7 +126,7 @@ export default class Resume extends Component {
             BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
         db.get('token').then(function (doc) {
-            
+
         }).then(function (response) {
             // handle response
         }).catch(function (err) {
@@ -95,10 +162,10 @@ export default class Resume extends Component {
                 </View>
                 <View style={styles.container}>
                     <View style={styles.inputRow}>
-                        <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={this._getEmail}/>
+                        <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={(email) => this.setState({ email }) } />
                     </View>
                     <View style={styles.inputRow}>
-                        <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={this._getPassword}/>
+                        <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={(password) => this.setState({ password }) }/>
                     </View>
                     <View>
                         <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
