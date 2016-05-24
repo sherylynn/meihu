@@ -61,19 +61,19 @@ var User = {
     var password = util.md5(req.param('password'));
     var re_password = util.md5(req.param('re_password'));
     var email = req.param('email');
-    /*
-        if (!username || !password || !re_password || !email) {
-          return res.send({
-            status: 0,
-            data: '信息填写不全'
-          });
-        } else if (password != re_password) {
-          return res.send({
-            status: 0,
-            data: '两次密码不一致'
-          });
-        }
-    */
+
+    if (!username || !password || !re_password || !email) {
+      return res.send({
+        status: 0,
+        data: '信息填写不全'
+      });
+    } else if (password != re_password) {
+      return res.send({
+        status: 0,
+        data: '两次密码不一致'
+      });
+    }
+
     db_user.createIndex({
       index: {
         fields: ['foo']

@@ -1,5 +1,5 @@
 var Service = {
-  host:'http://192.168.0.249:3000',
+  host:'http://mh.kenx.cn:3000',
   login: '/user/login',
   loginByToken: '/user/login/token',
   getUser: '/user/get',
