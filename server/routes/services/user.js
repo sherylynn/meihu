@@ -3,7 +3,7 @@ var util = require('./../util');
 var USER_PATH = './database/user.json';
 var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
-var db_user = new PouchDB('http://127.0.0.1:5984/shit');
+var db_user = new PouchDB('shit');
 
 var User = {
 
