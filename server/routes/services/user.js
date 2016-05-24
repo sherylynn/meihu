@@ -1,7 +1,9 @@
 var fs = require('fs');
 var util = require('./../util');
 var USER_PATH = './database/user.json';
-
+var PouchDB=require('pouchdb');
+PouchDB.plugin(require('pouchdb-find'));
+var db_user =new PouchDB('shit');
 
 var User = {
 
@@ -57,26 +59,40 @@ var User = {
   addUser: function(req, res) {
     var username = req.param('username');
     var password = util.md5(req.param('password'));
+    var re_password=util.md5(req.param('re_password'));
     var email = req.param('email');
 
-    if (!username || !password) {
+    if (!username || !password ||!re_password || !email ) {
       return res.send({
         status: 0,
         data: '信息填写不全'
       });
+    }else if(password!=re_password){
+      return res.send({
+        status: 0,
+        data: '两次密码不一致'
+      });
     }
-
+    db_user.find({
+      selector:{
+        "username":username
+      }
+    }).then(function (result) {
+      console.log(result);
+      return db_user.find({
+        selector:{
+          "email":email
+        }
+      }).then(function (result) {
+        return 
+      })
+    })
     try {
-      var content = JSON.parse(fs.readFileSync(USER_PATH));
       var obj = {
         "userid": util.guid(),
         "username": username,
         "password": password,
-        "partment": partment,
-        "tel": tel,
         "email": email,
-        "tag": tag,
-        "creater": creater,
         "time": new Date(),
         "token": ''
       };
