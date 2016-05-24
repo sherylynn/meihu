@@ -11,6 +11,7 @@ import {
     BackAndroid,
     StyleSheet,
     View,
+    Alert,
     ScrollView,
     Image,
     Text,
@@ -31,8 +32,10 @@ export default class Resume extends Component {
         super(props);
         this.state = {
             title: null,
-            password: '',
+            username:'',
             email: '',
+            password:'',
+            re_password:'',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -69,34 +72,34 @@ export default class Resume extends Component {
                 var user = data.data;
                 //加入数据到本地
                 db_local.put({
-                    _id:'user',
-                    'username':user.username,
+                    _id: 'user',
+                    'username': user.username,
                     'token': user.token,
                     'userid': user.userid,
                     'email': user.email,
                 }).then(
                     function () {
-                        
+
                     }
-                ).catch(function (err) {
-                    if (!err) {
-                        that.setState({
-                            showLogin: {
-                                height: 0,
-                                width: 0,
-                                flex: 0,
-                            },
-                            showIndex: {
-                                flex: 1,
-                                opacity: 1
-                            },
-                            isLoadingShow: false
-                        });
-                    }
-                });
+                    ).catch(function (err) {
+                        if (!err) {
+                            that.setState({
+                                showLogin: {
+                                    height: 0,
+                                    width: 0,
+                                    flex: 0,
+                                },
+                                showIndex: {
+                                    flex: 1,
+                                    opacity: 1
+                                },
+                                isLoadingShow: false
+                            });
+                        }
+                    });
 
             } else {
-                AlertIOS.alert('登录', '用户名或者密码错误');
+                Alert.alert('登录', '用户名或者密码错误');
                 that.setState({
                     showLogin: {
                         flex: 1,
@@ -113,7 +116,75 @@ export default class Resume extends Component {
         });
     }
     _reg() {
+        let username = this.state.username;
+        let email = this.state.email;
+        let password = this.state.password;
+        let re_password = this.state.re_password;
+        let path = Service.host + Service.createUser;
+        let that = this;
 
+        //隐藏注册页 & 加载loading
+        that.setState({
+            showLogin: {
+                height: 0,
+                width: 0,
+                flex: 0,
+            },
+            isLoadingShow: true
+        });
+        Util.post(path, {
+            username: username,
+            email: email,
+            password: password,
+            re_password:re_password,
+            deviceId: DeviceInfo.getUniqueID(),
+        }, function (data) {
+            if (data.status) {
+                var user = data.data;
+                //加入数据到本地
+                db_local.put({
+                    _id: 'user',
+                    'username': user.username,
+                    'token': user.token,
+                    'userid': user.userid,
+                    'email': user.email,
+                }).then(
+                    function () {
+
+                    }
+                    ).catch(function (err) {
+                        if (!err) {
+                            that.setState({
+                                showLogin: {
+                                    height: 0,
+                                    width: 0,
+                                    flex: 0,
+                                },
+                                showIndex: {
+                                    flex: 1,
+                                    opacity: 1
+                                },
+                                isLoadingShow: false
+                            });
+                        }
+                    });
+
+            } else {
+                Alert.alert('注册', data.data);
+                that.setState({
+                    showLogin: {
+                        flex: 1,
+                        opacity: 1
+                    },
+                    showIndex: {
+                        height: 0,
+                        width: 0,
+                        flex: 0,
+                    },
+                    isLoadingShow: false
+                });
+            }
+        });
     }
     _getEmail() {
 
@@ -125,7 +196,7 @@ export default class Resume extends Component {
         if (Platform.OS === 'android') {
             BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
-        db.get('token').then(function (doc) {
+        db_local.get('token').then(function (doc) {
 
         }).then(function (response) {
             // handle response
@@ -162,14 +233,24 @@ export default class Resume extends Component {
                 </View>
                 <View style={styles.container}>
                     <View style={styles.inputRow}>
-                        <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={(email) => this.setState({ email }) } />
+                        <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={(email) => this.setState({ email }) } />
                     </View>
+                    {this.props.title == '注册' ?
+                        <View style={styles.inputRow}>
+                            <Text>用户名</Text><TextInput style={styles.input} placeholder="请输入用户名" onChangeText={(username) => this.setState({ username }) } />
+                        </View> : null
+                    }
                     <View style={styles.inputRow}>
-                        <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={(password) => this.setState({ password }) }/>
+                        <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={(password) => this.setState({ password }) }/>
                     </View>
+                    {this.props.title == '注册' ?
+                        <View style={styles.inputRow}>
+                            <Text>密　码</Text><TextInput style={styles.input} placeholder="请再次输入密码" password={true} onChangeText={(re_password) => this.setState({ re_password }) }/>
+                        </View> : null
+                    }
                     <View>
-                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
-                            <Text style={{ color: '#fff' }}>登录</Text>
+                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? ()=>this._reg() :()=>this._login()}>
+                            <Text style={{ color: '#fff' }}>{this.props.title}</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

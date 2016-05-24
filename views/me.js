@@ -46,6 +46,12 @@ let BANNER_IMGS = [
 
 import Resume from './me/resume';
 import Util from './util.js'
+var Service = require('./service.js');
+import PouchDB from 'pouchdb'
+import 'pouchdb-asyncstorage-down'
+const db_remote = new PouchDB(Service['host'] + '/db/users');
+const db_local = new PouchDB('me', { adapter: 'asyncstorage' })
+
 export default class Me extends Component {
     constructor(props) {
         super(props);
@@ -92,6 +98,13 @@ export default class Me extends Component {
     _reg() {
 
     }
+    _logout() {
+        db_local.destroy().then(function (response) {
+            // success
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
     _getEmail() {
 
     }
@@ -126,11 +139,16 @@ export default class Me extends Component {
                         <Image source={require('../images/avatar.png') } style={styles.avatar}/>
                         <Text style={styles.name}>关爱每一天</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
+                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('登录') }>
                                 <Text style={{ color: '#fff' }}>登录</Text>
                             </TouchableHighlight>
-                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._reg}>
+                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('注册') }>
                                 <Text style={{ color: '#fff' }}>注册</Text>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._logout() }>
+                                <Text style={{ color: '#fff' }}>注销</Text>
                             </TouchableHighlight>
                         </View>
                     </Image>
