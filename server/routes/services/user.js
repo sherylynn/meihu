@@ -62,7 +62,7 @@ var User = {
     if (!username || !password) {
       return res.send({
         status: 0,
-        data: '缺少必要参数'
+        data: '信息填写不全'
       });
     }
 
