@@ -1,5 +1,3 @@
-
-
 var React = require('react-native');
 var Dimensions = require('Dimensions');
 
@@ -18,7 +16,7 @@ var Util = {
   },
 
   //post请求
-  post: function (url, data, callback) {
+  post: function(url, data, callback) {
     console.log(data);
     console.log(JSON.stringify(data));
     var fetchOptions = {
@@ -27,15 +25,15 @@ var Util = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      
+
       body: JSON.stringify(data)
     };
 
     fetch(url, fetchOptions)
-    .then((response) => response.json())
-    .then((responseData) => {
-      callback(JSON.parse(responseData));
-    });
+      .then((response) => response.text())
+      .then((responseText) => {
+        callback(JSON.parse(responseText));
+      });
   },
   //Key
   key: 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE'

@@ -8,6 +8,8 @@ var db_user = new PouchDB('shit');
 var User = {
 
   init: function (app) {
+    console.log('已经加载');
+    app.get('/fuck', this.fuck)
     app.post('/user/get', this.getUser);
     app.post('/user/create', this.addUser);
     app.post('/user/login', this.login);
@@ -16,6 +18,12 @@ var User = {
     app.post('/user/delete', this.deleteUser);
   },
 
+  fuck: function (req, res) {
+    return res.send({
+      status: 0,
+      data: '信息填写不全'
+    });
+  },
   //获取用户信息
   getUser: function (req, res) {
     var key = req.param('key');
@@ -57,11 +65,11 @@ var User = {
 
   //添加用户
   addUser: function (req, res) {
+    console.log(req);
     var username = req.param('username');
     var password = util.md5(req.param('password'));
     var re_password = util.md5(req.param('re_password'));
     var email = req.param('email');
-
     if (!username || !password || !re_password || !email) {
       return res.send({
         status: 0,
