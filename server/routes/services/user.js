@@ -4,10 +4,14 @@ var USER_PATH = './database/user.json';
 var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
 var db_user = new PouchDB('shit');
-
+db_user.destroy().then(function(response) {
+  // success
+}).catch(function(err) {
+  console.log(err);
+});
 var User = {
 
-  init: function (app) {
+  init: function(app) {
     console.log('已经加载');
     app.get('/fuck', this.fuck)
     app.post('/user/get', this.getUser);
@@ -18,14 +22,14 @@ var User = {
     app.post('/user/delete', this.deleteUser);
   },
 
-  fuck: function (req, res) {
+  fuck: function(req, res) {
     return res.send({
       status: 0,
       data: '信息填写不全'
     });
   },
   //获取用户信息
-  getUser: function (req, res) {
+  getUser: function(req, res) {
     var key = req.param('key');
     if (key !== util.getKey()) {
       return res.send({
@@ -33,7 +37,7 @@ var User = {
         data: '使用了没有鉴权的key'
       });
     }
-    fs.readFile(USER_PATH, function (err, data) {
+    fs.readFile(USER_PATH, function(err, data) {
       if (!err) {
         try {
           var obj = JSON.parse(data);
@@ -64,8 +68,7 @@ var User = {
   },
 
   //添加用户
-  addUser: function (req, res) {
-    console.log(req);
+  addUser: function(req, res) {
     var username = req.param('username');
     var password = util.md5(req.param('password'));
     var re_password = util.md5(req.param('re_password'));
@@ -86,33 +89,33 @@ var User = {
       index: {
         fields: ['foo']
       }
-    }).then(function (result) {
+    }).then(function(result) {
       // yo, a result
       console.log(result)
       return db_user.find({
         selector: {
           username: username
         }
-      }).then(function (result) {
+      }).then(function(result) {
         console.log('username');
         return res.send({
           status: 0,
           data: '用户名已经被注册'
         });
-      }).catch(function (err) {
+      }).catch(function(err) {
         console.log(err)
         return db_user.find({
           selector: {
             email: email
           }
         })
-      }).then(function (result) {
+      }).then(function(result) {
         console.log('email');
         return res.send({
           status: 0,
           data: '已经注册过的邮箱'
         });
-      }).catch(function (err) {
+      }).catch(function(err) {
         console.log(err)
         return db_user.post({
           username: username,
@@ -121,7 +124,7 @@ var User = {
           time: new Date(),
           token: ''
         })
-      }).then(function (result) {
+      }).then(function(result) {
         console.log('ok')
         return res.send({
           status: 1,
@@ -129,20 +132,20 @@ var User = {
             username: username
           }
         });
-      }).catch(function (err) {
+      }).catch(function(err) {
         console.log(err)
         return res.send({
           status: 0,
           err: e
         });
       })
-    }).catch(function (err) {
+    }).catch(function(err) {
       console.log(err)
     })
   },
 
   //用户登录
-  login: function (req, res) {
+  login: function(req, res) {
     var email = req.param('email');
     var password = util.md5(req.param('password'));
     var deviceId = req.param('deviceId');
@@ -171,7 +174,7 @@ var User = {
   },
 
   //通过token登录
-  loginByToken: function (req, res) {
+  loginByToken: function(req, res) {
     var token = req.param('token');
     var content = JSON.parse(fs.readFileSync(USER_PATH));
 
@@ -192,7 +195,7 @@ var User = {
   },
 
   //用户修改密码
-  updatePassword: function (req, res) {
+  updatePassword: function(req, res) {
     var token = req.param('token');
     var oldPassword = util.md5(req.param('oldPassword'));
     var password = util.md5(req.param('password'));
@@ -217,7 +220,7 @@ var User = {
   },
 
   //删除用户
-  deleteUser: function (req, res) {
+  deleteUser: function(req, res) {
     var token = req.param('token');
     var email = req.param('email');
 
