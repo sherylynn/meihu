@@ -82,65 +82,148 @@ var User = {
         status: 0,
         data: '两次密码不一致'
       });
-    }
-
-    db_user.createIndex({
-      index: {
-        fields: ['username']
-      }
-    }).then(function (result) {
-      // yo, a result
-      console.log(result)
-      return db_user.find({
-        selector: {
-          username: username
+    } else {
+      db_user.allDocs({
+        include_docs: true,
+      }).then(function (r) {
+        //console.log(r['rows'])
+        var checkUsername = function (doc) {
+          return doc['doc']['username'] == username
         }
-      }).then(function (result) {
-        console.log('username');
-        return res.send({
-          status: 0,
-          data: '用户名已经被注册'
-        });
-      }).catch(function (err) {
-        console.log(err)
-        return db_user.find({
-          selector: {
-            email: email
-          }
-        })
-      }).then(function (result) {
-        console.log('email');
-        return res.send({
-          status: 0,
-          data: '已经注册过的邮箱'
-        });
-      }).catch(function (err) {
-        console.log(err)
-        return db_user.post({
-          username: username,
-          email: email,
-          password: password,
-          time: new Date(),
-          token: ''
-        })
-      }).then(function (result) {
-        console.log('ok')
-        return res.send({
-          status: 1,
-          data: {
-            username: username
-          }
-        });
-      }).catch(function (err) {
-        console.log(err)
-        return res.send({
-          status: 0,
-          err: e
-        });
+        var checkEmail = function (doc) {
+          return doc['doc']['email'] == email
+        }
+        if (r['rows'].filter(checkUsername).length) {
+          return res.send({
+            status: 0,
+            data: '用户名已经被注册'
+          });
+        } else if (r['rows'].filter(checkEmail).length) {
+          return res.send({
+            status: 0,
+            data: '邮箱已注册'
+          });
+        } else {
+          return db_user.post({
+            username: username,
+            email: email,
+            password: password,
+            time: new Date(),
+            token: ''
+          }).then(function (r) {
+            //console.log(r)
+            console.log("注册成功")
+            return res.send({
+              status: 1,
+              data: {
+                username: username
+              }
+            });
+          }).catch(function (err) {
+            console.log(err)
+            return res.send({
+              status: 0,
+              err: e
+            });
+          })
+        }
+
       })
-    }).catch(function (err) {
-      console.log(err)
-    })
+    }
+    /*
+        db_user.createIndex({
+          index: {
+            fields: ['username','email']
+          }
+        }).then(function(r){
+          console.log(r);
+          return db_user.find({
+            selector:{
+              $and:[
+                {username:username},
+                {email:email}
+              ]
+            }
+          })
+        }).then(function (r) {
+          return res.send({
+              status: 0,
+              data: '邮箱或用户名已经被使用'
+            });
+        }).catch(function (err) {
+          if(err){
+            console.log(err);
+            return db_user.post({
+              username: username,
+              email: email,
+              password: password,
+              time: new Date(),
+              token: ''
+            })
+          }
+        })
+    */
+    /*
+        db_user.createIndex({
+          index: {
+            fields: ['username']
+          }
+        }).then(function (result) {
+          // yo, a result
+          console.log(result)
+          return db_user.find({
+            selector: {
+              username: username
+            }
+          }).then(function (result) {
+            console.log(result['docs'][0]['username']);
+            return res.send({
+              status: 0,
+              data: '用户名已经被注册'
+            });
+          }).catch(function (err) {
+            console.log(err)
+            return db_user.find({
+              selector: {
+                email: email
+              }
+            })
+          }).then(function (result) {
+            console.log(result)
+            //console.log(result['docs'][0]['email']);
+            return res.send({
+              status: 0,
+              data: '已经注册过的邮箱'
+            });
+          }).catch(function (err) {
+            console.log(err)
+            return db_user.post({
+              username: username,
+              email: email,
+              password: password,
+              time: new Date(),
+              token: ''
+            })
+          }).then(function (result) {
+            console.log('ok')
+            return res.send({
+              status: 1,
+              data: {
+                username: username
+              }
+            });
+          }).catch(function (err) {
+            console.log(err)
+            return res.send({
+              status: 0,
+              err: e
+            });
+          })
+        }).catch(function (err) {
+          console.log(err)
+        })
+        
+    */
   },
 
   //用户登录
@@ -149,7 +232,37 @@ var User = {
     var password = util.md5(req.param('password'));
     var deviceId = req.param('deviceId');
     var token = util.guid() + deviceId;
-    var content = JSON.parse(fs.readFileSync(USER_PATH).toString());
+    db_user.createIndex({
+      index: {
+        fields: ['username', 'password']
+      }
+    }).then(function (r) {
+      console.log(r);
+      return db_user.find({
+        selector: {
+          $and: [
+            { username: username },
+            { password: password }
+          ]
+        }
+      })
+    }).then(function (r) {
+      return db_user.put({
+        _id: r['docs'][0]['_id'],
+        _rew: r['docs'][0]['_rev'],
+        'token': token
+      })
+    }).then(function () {
+      return  res.send({
+          status: 1,
+          data: r['docs'][0].s
+        });
+    }).catch(function (err) {
+      if (err) {
+        console.log(err)
+      }
+    })
+
     for (var i in content) {
       //验证通过
       if (content[i].email === email && content[i].password === password) {
