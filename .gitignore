@@ -38,7 +38,7 @@ server/node_modules/
 server/pouch__all_dbs__/
 server/_replicator/
 server/_users/
-server/shit/
+server/shit*
 server/log.txt
 
 # vscode
