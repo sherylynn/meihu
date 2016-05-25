@@ -86,7 +86,7 @@ var User = {
 
     db_user.createIndex({
       index: {
-        fields: ['foo']
+        fields: ['username']
       }
     }).then(function (result) {
       // yo, a result
