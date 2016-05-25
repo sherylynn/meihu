@@ -19,19 +19,22 @@ var Util = {
 
   //post请求
   post: function (url, data, callback) {
+    console.log(data);
+    console.log(JSON.stringify(data));
     var fetchOptions = {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
+      
       body: JSON.stringify(data)
     };
 
     fetch(url, fetchOptions)
-    .then((response) => response.text())
-    .then((responseText) => {
-      callback(JSON.parse(responseText));
+    .then((response) => response.json())
+    .then((responseData) => {
+      callback(JSON.parse(responseData));
     });
   },
   //Key
