@@ -1,7 +1,7 @@
 var Service = {
-  //host:'http://mh.kenx.cn:3000',
-  host:'http://10.0.2.2:3000',
-  
+  host: 'http://mh.kenx.cn:3000',
+  //host:'http://10.0.2.2:3000',
+
   login: '/user/login',
   loginByToken: '/user/login/token',
   getUser: '/user/get',
@@ -12,7 +12,7 @@ var Service = {
   addMakeup: '/makeup/add',
   updatePassword: '/user/password/update',
   deleteUser: '/user/delete',
-  db:'/db/users'
+  db: '/db/users'
 };
 
 module.exports = Service;
