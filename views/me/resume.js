@@ -32,10 +32,10 @@ export default class Resume extends Component {
         super(props);
         this.state = {
             title: null,
-            username:'',
-            email: '',
-            password:'',
-            re_password:'',
+            username:'lynn',
+            email: '352281674@qq.com',
+            password:'1234',
+            re_password:'1234',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -233,19 +233,19 @@ export default class Resume extends Component {
                 </View>
                 <View style={styles.container}>
                     <View style={styles.inputRow}>
-                        <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={(email) => this.setState({ email }) } />
+                        <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" value={this.state.email} onChangeText={(email) => this.setState({ email }) } />
                     </View>
                     {this.props.title == '注册' ?
                         <View style={styles.inputRow}>
-                            <Text>用户名</Text><TextInput style={styles.input} placeholder="请输入用户名" onChangeText={(username) => this.setState({ username }) } />
+                            <Text>用户名</Text><TextInput style={styles.input} placeholder="请输入用户名" value={this.state.username} onChangeText={(username) => this.setState({ username }) } />
                         </View> : null
                     }
                     <View style={styles.inputRow}>
-                        <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={(password) => this.setState({ password }) }/>
+                        <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} value={this.state.password} onChangeText={(password) => this.setState({ password }) }/>
                     </View>
                     {this.props.title == '注册' ?
                         <View style={styles.inputRow}>
-                            <Text>密　码</Text><TextInput style={styles.input} placeholder="请再次输入密码" password={true} onChangeText={(re_password) => this.setState({ re_password }) }/>
+                            <Text>密　码</Text><TextInput style={styles.input} placeholder="请再次输入密码" password={true} value={this.state.re_password} onChangeText={(re_password) => this.setState({ re_password }) }/>
                         </View> : null
                     }
                     <View>
