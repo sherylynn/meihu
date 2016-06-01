@@ -259,7 +259,7 @@ var User = {
         });
       } else {
         console.log(password);
-        console.log(doc[password]);
+        console.log(doc['password']);
         return res.send({
           status: 0,
           data: '密码错误'
