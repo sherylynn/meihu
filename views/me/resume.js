@@ -229,7 +229,7 @@ export default class Resume extends Component {
     _flash() {
         const {navigator} = this.props;
         if(this.props.Login) {
-                this.props.Login();
+                this.props.Login(false);
             }
         const routers = navigator.getCurrentRoutes();
         console.log(routers);

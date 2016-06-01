@@ -69,7 +69,7 @@ var User = {
   },
 
   //添加用户
-  addUser: function (req, res) {
+  addUser: async function (req, res) {
     var db_user = new PouchDB('shit');
     var username = req.param('username');
     var password = util.md5(req.param('password'));
@@ -88,6 +88,62 @@ var User = {
         data: '两次密码不一致'
       });
     } else {
+      var r_index = await db_user.createIndex({
+        index: {
+          fields: ['username']
+        }
+      });
+      console.log(r_index);
+      try {
+        var r_username = await db_user.find({
+          selector: {
+            username: username
+          }
+        })
+        if (r_username['docs'].length > 0) {
+          console.log(r_username);
+          return res.send({
+            status: 0,
+            data: '用户名重复'
+          });
+        } else {
+          try {
+            var doc = await db_user.put({
+              _id: email,
+              username: username,
+              email: email,
+              password: password,
+              time: new Date(),
+              token: token
+            });
+            return res.send({
+              status: 1,
+              data: {
+                username: username,
+                email: email,
+                token: token
+              }
+            });
+          } catch (err) {
+            console.log(err);
+
+            return res.send({
+              status: 0,
+              data: '这个邮箱已经被注册使用'
+            });
+          }
+        }
+
+
+      } catch (error) {
+        console.log(error);
+        return res.send({
+          status: 0,
+          data: '后台维护'
+        });
+      }
+
+      /*
       db_user.allDocs({
         include_docs: true,
       }).then(function (r) {
@@ -98,15 +154,15 @@ var User = {
         var checkEmail = function (doc) {
           return doc['doc']['email'] == email
         }
-        if (r['rows'].filter(checkUsername).length) {
-          return res.send({
-            status: 0,
-            data: '用户名已经被注册'
-          });
-        } else if (r['rows'].filter(checkEmail).length) {
+        if (r['rows'].filter(checkEmail).length) {
           return res.send({
             status: 0,
             data: '邮箱已注册'
+          });
+        }else if (r['rows'].filter(checkUsername).length) {
+          return res.send({
+            status: 0,
+            data: '用户名已经被注册'
           });
         } else {
           return db_user.put({
@@ -137,6 +193,7 @@ var User = {
         }
 
       })
+      */
     }
     /*
         db_user.createIndex({
@@ -247,6 +304,9 @@ var User = {
         var response = await db_user.put({
           _id: email,
           _rev: doc._rev,
+          email:email,
+          password:password,
+          username:doc['username'],
           'token': token
         });
         return res.send({
@@ -260,6 +320,7 @@ var User = {
       } else {
         console.log(password);
         console.log(doc['password']);
+        console.log(doc);
         return res.send({
           status: 0,
           data: '密码错误'
@@ -367,20 +428,29 @@ var User = {
     });
     console.log(r_index);
     try {
-      var r_email = await db_user.find({
+      var r_token = await db_user.find({
         selector: {
           token: token
         }
       })
-      return res.send({
-        status: 1,
-        data: r_email['docs'][0].s
-      });
+      if (r_token['docs'].length > 0) {
+        console.log(r_token);
+        return res.send({
+          status: 1,
+          data: r_token['docs'][0]
+        });
+      } else {
+        return res.send({
+          status: 0,
+          data: 'token失效'
+        });
+      }
+
     } catch (error) {
       console.log(error)
       return res.send({
         status: 0,
-        data: 'token失效'
+        data: '后台维护'
       });
     }
     /*

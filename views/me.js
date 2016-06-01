@@ -60,6 +60,9 @@ export default class Me extends Component {
                 flex: 1,
                 opacity: 1
             },
+            user:{
+                username:'关爱每一天'
+            },
             Login: true,
         };
     }
@@ -69,8 +72,12 @@ export default class Me extends Component {
             var path = Service.host + Service.loginByToken;
             var data = await Util.post_promise(path, { token: doc.token });
             if (data.status) {
+                console.log(data.data)
                 this.setState({
-                    Login: false
+                    Login: false,
+                    user:{
+                        username:data.data['username']
+                    }
                 });
             } else {
                 this._logout();
@@ -125,7 +132,7 @@ export default class Me extends Component {
         let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
         try {
             await db_local.destroy();
-            Alert.alert('提示', '已经注销')
+            //Alert.alert('提示', '已经注销')
             this.setState({
             Login: true,
         })
@@ -152,9 +159,9 @@ export default class Me extends Component {
                 component: Resume,
                 params: {
                     title: title,
-                    Login: function() {
+                    Login: function(fuck) {
                         _this.setState({
-                            Login:false
+                            Login:fuck
                         })
                     }
                 },
@@ -171,8 +178,9 @@ export default class Me extends Component {
                     <Image source={require('../images/avatar_bg.png') }
                         style={styles.backgroundImage}>
                         <Image source={require('../images/avatar.png') } style={styles.avatar}/>
-                        <Text style={styles.name}>关爱每一天</Text>
+                        <Text style={styles.name}>{this.state.Login ?'关爱每一天':this.state.user.username}</Text>
                         {this.state.Login ?
+                            
                             <View style={{ flexDirection: 'row' }}>
                                 <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('登录') }>
                                     <Text style={{ color: '#fff' }}>登录</Text>
