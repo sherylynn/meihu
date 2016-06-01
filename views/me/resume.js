@@ -32,10 +32,10 @@ export default class Resume extends Component {
         super(props);
         this.state = {
             title: null,
-            username:'lynn',
+            username: 'lynn',
             email: '352281674@qq.com',
-            password:'1234',
-            re_password:'1234',
+            password: '1234',
+            re_password: '1234',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -48,143 +48,157 @@ export default class Resume extends Component {
         };
 
     }
-    _login() {
+    async _login() {
+        //Alert.alert('登录', '这是登录的按钮');
+        let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
         var email = this.state.email;
         var password = this.state.password;
         var path = Service.host + Service.login;
-        var that = this;
 
-        //隐藏登录页 & 加载loading
-        that.setState({
-            showLogin: {
-                height: 0,
-                width: 0,
-                flex: 0,
-            },
-            isLoadingShow: true
-        });
-        Util.post(path, {
+        var data = await Util.post_promise(path, {
             email: email,
             password: password,
             deviceId: DeviceInfo.getUniqueID(),
-        }, function (data) {
-            if (data.status) {
-                var user = data.data;
-                //加入数据到本地
-                db_local.put({
+        })
+        if (data.status) {
+            var user = data.data;
+            //加入数据到本地
+            try {
+                var response = db_local.put({
                     _id: 'user',
                     'username': user.username,
                     'token': user.token,
                     'userid': user.userid,
                     'email': user.email,
-                }).then(
-                    function () {
-
-                    }
-                    ).catch(function (err) {
-                        if (!err) {
-                            that.setState({
-                                showLogin: {
-                                    height: 0,
-                                    width: 0,
-                                    flex: 0,
-                                },
-                                showIndex: {
-                                    flex: 1,
-                                    opacity: 1
-                                },
-                                isLoadingShow: false
-                            });
-                        }
+                })
+                this._flash();
+            } catch (err) {
+                if (!err) {
+                    this.setState({
+                        showLogin: {
+                            height: 0,
+                            width: 0,
+                            flex: 0,
+                        },
+                        showIndex: {
+                            flex: 1,
+                            opacity: 1
+                        },
+                        isLoadingShow: false
                     });
-
-            } else {
-                Alert.alert('登录', '用户名或者密码错误');
-                that.setState({
-                    showLogin: {
-                        flex: 1,
-                        opacity: 1
-                    },
-                    showIndex: {
-                        height: 0,
-                        width: 0,
-                        flex: 0,
-                    },
-                    isLoadingShow: false
-                });
+                }
             }
-        });
+
+        } else {
+            Alert.alert('登录', data.data);
+            this.setState({
+                showLogin: {
+                    flex: 1,
+                    opacity: 1
+                },
+                showIndex: {
+                    height: 0,
+                    width: 0,
+                    flex: 0,
+                },
+                isLoadingShow: false
+            });
+        }
+
     }
-    _reg() {
+    async _reg() {
+        //Alert.alert('注册', '这是注册的按钮');
+        let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
         let username = this.state.username;
         let email = this.state.email;
         let password = this.state.password;
         let re_password = this.state.re_password;
         let path = Service.host + Service.createUser;
-        let that = this;
 
-        //隐藏注册页 & 加载loading
-        that.setState({
-            showLogin: {
-                height: 0,
-                width: 0,
-                flex: 0,
-            },
-            isLoadingShow: true
-        });
-        Util.post(path, {
+        var data = await Util.post_promise(path, {
             username: username,
             email: email,
             password: password,
-            re_password:re_password,
+            re_password: re_password,
             deviceId: DeviceInfo.getUniqueID(),
-        }, function (data) {
-            if (data.status) {
-                var user = data.data;
-                //加入数据到本地
-                db_local.put({
+        });
+        if (data.status) {
+            var user = data.data;
+            try {
+                //var doc = await db_local.get('user');
+                var response = await db_local.put({
                     _id: 'user',
                     'username': user.username,
                     'token': user.token,
-                    'userid': user.userid,
                     'email': user.email,
-                }).then(
-                    function () {
-
-                    }
-                    ).catch(function (err) {
-                        if (!err) {
-                            that.setState({
-                                showLogin: {
-                                    height: 0,
-                                    width: 0,
-                                    flex: 0,
-                                },
-                                showIndex: {
-                                    flex: 1,
-                                    opacity: 1
-                                },
-                                isLoadingShow: false
-                            });
-                        }
-                    });
-
-            } else {
-                Alert.alert('注册', data.data);
-                that.setState({
-                    showLogin: {
-                        flex: 1,
-                        opacity: 1
-                    },
-                    showIndex: {
-                        height: 0,
-                        width: 0,
-                        flex: 0,
-                    },
-                    isLoadingShow: false
                 });
+                this._flash();
+            } catch (err) {
+                if (!err) {
+                    this.setState({
+                        showLogin: {
+                            height: 0,
+                            width: 0,
+                            flex: 0,
+                        },
+                        showIndex: {
+                            flex: 1,
+                            opacity: 1
+                        },
+                        isLoadingShow: false
+                    });
+                } else {
+                    console.log(err)
+                }
             }
-        });
+
+
+            //加入数据到本地
+            /*
+            db_local.put({
+                _id: 'user',
+                'username': user.username,
+                'token': user.token,
+                'email': user.email,
+            }).then(
+                function () {
+                    console.log('注册成功')
+                    ()=>this._pressButton();
+                }
+                ).catch(function (err) {
+                    if (!err) {
+                        that.setState({
+                            showLogin: {
+                                height: 0,
+                                width: 0,
+                                flex: 0,
+                            },
+                            showIndex: {
+                                flex: 1,
+                                opacity: 1
+                            },
+                            isLoadingShow: false
+                        });
+                    }else{
+                        console.log(err)
+                    }
+                });
+            */
+        } else {
+            Alert.alert('注册', data.data);
+            this.setState({
+                showLogin: {
+                    flex: 1,
+                    opacity: 1
+                },
+                showIndex: {
+                    height: 0,
+                    width: 0,
+                    flex: 0,
+                },
+                isLoadingShow: false
+            });
+        }
     }
     _getEmail() {
 
@@ -192,6 +206,7 @@ export default class Resume extends Component {
     _getPassword() {
 
     }
+
     componentWillMount() {
         if (Platform.OS === 'android') {
             BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
@@ -210,7 +225,20 @@ export default class Resume extends Component {
             BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
-
+    
+    _flash() {
+        const {navigator} = this.props;
+        if(this.props.Login) {
+                this.props.Login();
+            }
+        const routers = navigator.getCurrentRoutes();
+        console.log(routers);
+        if (routers.length > 1) {
+            navigator.pop();
+            return true;
+        }
+        return false;
+    };
     _pressButton() {
         const {navigator} = this.props;
         const routers = navigator.getCurrentRoutes();
@@ -249,7 +277,7 @@ export default class Resume extends Component {
                         </View> : null
                     }
                     <View>
-                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? ()=>this._reg() :()=>this._login()}>
+                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? () => this._reg() : () => this._login() }>
                             <Text style={{ color: '#fff' }}>{this.props.title}</Text>
                         </TouchableHighlight>
                     </View>

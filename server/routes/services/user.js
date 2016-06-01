@@ -3,7 +3,8 @@ var util = require('./../util');
 var USER_PATH = './database/user.json';
 var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
-var db_user = new PouchDB('shit');
+//尝试不在开始声明以便删除数据库
+//var db_user = new PouchDB('shit');
 var User = {
 
   init: function (app) {
@@ -18,6 +19,7 @@ var User = {
   },
 
   destroyUser: function (req, res) {
+    var db_user = new PouchDB('shit');
     db_user.destroy().then(function (response) {
       return res.send({
         status: 0,
@@ -68,10 +70,13 @@ var User = {
 
   //添加用户
   addUser: function (req, res) {
+    var db_user = new PouchDB('shit');
     var username = req.param('username');
     var password = util.md5(req.param('password'));
     var re_password = util.md5(req.param('re_password'));
+    var deviceId = req.param('deviceId');
     var email = req.param('email');
+    var token = util.guid() + deviceId;
     if (!username || !password || !re_password || !email) {
       return res.send({
         status: 0,
@@ -104,19 +109,22 @@ var User = {
             data: '邮箱已注册'
           });
         } else {
-          return db_user.post({
+          return db_user.put({
+            _id: email,
             username: username,
             email: email,
             password: password,
             time: new Date(),
-            token: ''
+            token: token
           }).then(function (r) {
             //console.log(r)
             console.log("注册成功")
             return res.send({
               status: 1,
               data: {
-                username: username
+                username: username,
+                email: email,
+                token: token
               }
             });
           }).catch(function (err) {
@@ -227,21 +235,100 @@ var User = {
   },
 
   //用户登录
-  login: function (req, res) {
+  login: async function (req, res) {
+    var db_user = new PouchDB('shit');
     var email = req.param('email');
     var password = util.md5(req.param('password'));
     var deviceId = req.param('deviceId');
     var token = util.guid() + deviceId;
+    try {
+      var doc = await db_user.get(email);
+      if (doc['password'] == password) {
+        var response = await db_user.put({
+          _id: email,
+          _rev: doc._rev,
+          'token': token
+        });
+        return res.send({
+          status: 1,
+          data: {
+            email: email,
+            username: doc['username'],
+            token: token
+          }
+        });
+      } else {
+        console.log(password);
+        console.log(doc[password]);
+        return res.send({
+          status: 0,
+          data: '密码错误'
+        });
+      }
+
+    } catch (err) {
+      console.log(err);
+      return res.send({
+        status: 0,
+        data: '请检查是否是注册过的邮箱'
+      });
+    }
+    /*
+    var r_index = await db_user.createIndex({
+      index: {
+        fields: ['email', 'password']
+      }
+    });
+    console.log(r_index);
+    try {
+      var r_email = await db_user.find({
+        selector: {
+          email: email
+        }
+      })
+      if (r_email['docs'][0]['password'] == password) {
+        try {
+          var r_all = await db_user.put({
+            _id: r_email['docs'][0]['_id'],
+            _rew: r_email['docs'][0]['_rev'],
+            'token': token
+          })
+          return res.send({
+            status: 1,
+            data: r_email['docs'][0].s
+          });
+        } catch (error) {
+          console.log(error);
+          return res.send({
+            status: 0,
+            data: '出故障了'
+          });
+        }
+      } else {
+        return res.send({
+          status: 0,
+          data: '密码错误'
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      return res.send({
+        status: 0,
+        data: '请检查是否是注册过的邮箱'
+      });
+    }
+    */
+    /*
     db_user.createIndex({
       index: {
-        fields: ['username', 'password']
+        fields: ['email', 'password']
       }
     }).then(function (r) {
       console.log(r);
       return db_user.find({
         selector: {
           $and: [
-            { username: username },
+            { email: email },
             { password: password }
           ]
         }
@@ -253,57 +340,76 @@ var User = {
         'token': token
       })
     }).then(function () {
-      return  res.send({
-          status: 1,
-          data: r['docs'][0].s
-        });
+      return res.send({
+        status: 1,
+        data: r['docs'][0].s
+      });
     }).catch(function (err) {
       if (err) {
-        console.log(err)
-      }
-    })
-
-    for (var i in content) {
-      //验证通过
-      if (content[i].email === email && content[i].password === password) {
-        content[i]['token'] = token;
-        //写入到文件中
-        console.log(content[i]);
-        fs.writeFileSync(USER_PATH, JSON.stringify(content));
-        //删除密码
-        delete content[i].password;
+        console.log(err);
         return res.send({
-          status: 1,
-          data: content[i]
+          status: 0,
+          data: '邮箱或者密码错误'
         });
       }
-    }
-
-    return res.send({
-      status: 0,
-      data: '用户名或者密码错误'
-    });
+    })
+    */
   },
 
   //通过token登录
-  loginByToken: function (req, res) {
+  loginByToken: async function (req, res) {
+    var db_user = new PouchDB('shit');
     var token = req.param('token');
-    var content = JSON.parse(fs.readFileSync(USER_PATH));
-
-    for (var i in content) {
-      if (token === content[i].token) {
-        delete content[i].password;
+    var r_index = await db_user.createIndex({
+      index: {
+        fields: ['token']
+      }
+    });
+    console.log(r_index);
+    try {
+      var r_email = await db_user.find({
+        selector: {
+          token: token
+        }
+      })
+      return res.send({
+        status: 1,
+        data: r_email['docs'][0].s
+      });
+    } catch (error) {
+      console.log(error)
+      return res.send({
+        status: 0,
+        data: 'token失效'
+      });
+    }
+    /*
+    db_user.createIndex({
+      index: {
+        fields: ['token']
+      }
+    }).then(function (r) {
+      console.log(r);
+      return db_user.find({
+        selector:
+        { token: token }
+      })
+    }).then(function () {
+      return res.send({
+        status: 1,
+        data: r['docs'][0].s
+      });
+    }).catch(function (err) {
+      if (err) {
+        console.log(err);
         return res.send({
-          status: 1,
-          data: content[i]
+          status: 0,
+          info: 'token失效'
         });
       }
-    }
+    })
+    */
 
-    return res.send({
-      status: 0,
-      info: 'token失效'
-    });
   },
 
   //用户修改密码

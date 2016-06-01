@@ -60,8 +60,31 @@ export default class Me extends Component {
                 flex: 1,
                 opacity: 1
             },
-
+            Login: true,
         };
+    }
+    async componentDidMount() {
+        try {
+            var doc = await db_local.get('user');
+            var path = Service.host + Service.loginByToken;
+            var data = await Util.post_promise(path, { token: doc.token });
+            if (data.status) {
+                this.setState({
+                    Login: false
+                });
+            } else {
+                this._logout();
+                this.setState({
+                    Login: true
+                })
+            }
+        } catch (err) {
+            console.log(err);
+            this._logout();
+            this.setState({
+                Login: true
+            })
+        }
     }
     doUpdate = info => {
         downloadUpdate(info).then(hash => {
@@ -98,12 +121,17 @@ export default class Me extends Component {
     _reg() {
 
     }
-    _logout() {
-        db_local.destroy().then(function (response) {
-            // success
-        }).catch(function (err) {
+    async _logout() {
+        let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
+        try {
+            await db_local.destroy();
+            Alert.alert('提示', '已经注销')
+            this.setState({
+            Login: true,
+        })
+        } catch (err) {
             console.log(err);
-        });
+        }
     }
     _getEmail() {
 
@@ -116,6 +144,7 @@ export default class Me extends Component {
         return (<Image source={data} style={styles.page} />)
     }
     _pressButton = title => {
+        let _this = this;
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
@@ -123,6 +152,11 @@ export default class Me extends Component {
                 component: Resume,
                 params: {
                     title: title,
+                    Login: function() {
+                        _this.setState({
+                            Login:false
+                        })
+                    }
                 },
             });
         }
@@ -138,19 +172,22 @@ export default class Me extends Component {
                         style={styles.backgroundImage}>
                         <Image source={require('../images/avatar.png') } style={styles.avatar}/>
                         <Text style={styles.name}>关爱每一天</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('登录') }>
-                                <Text style={{ color: '#fff' }}>登录</Text>
-                            </TouchableHighlight>
-                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('注册') }>
-                                <Text style={{ color: '#fff' }}>注册</Text>
-                            </TouchableHighlight>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._logout() }>
-                                <Text style={{ color: '#fff' }}>注销</Text>
-                            </TouchableHighlight>
-                        </View>
+                        {this.state.Login ?
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('登录') }>
+                                    <Text style={{ color: '#fff' }}>登录</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('注册') }>
+                                    <Text style={{ color: '#fff' }}>注册</Text>
+                                </TouchableHighlight>
+                            </View>
+                            :
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._logout() }>
+                                    <Text style={{ color: '#fff' }}>注销</Text>
+                                </TouchableHighlight>
+                            </View>
+                        }
                     </Image>
                 </View>
                 <TouchableHighlight

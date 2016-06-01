@@ -16,9 +16,9 @@ var Util = {
   },
 
   //post请求
-  post: function(url, data, callback) {
-    console.log(data);
-    console.log(JSON.stringify(data));
+  post: function (url, data, callback) {
+    //console.log(data);
+    //console.log(JSON.stringify(data));
     var fetchOptions = {
       method: 'POST',
       headers: {
@@ -34,6 +34,25 @@ var Util = {
       .then((responseText) => {
         callback(JSON.parse(responseText));
       });
+  },
+  post_promise: function (url, data) {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => response.text())
+        .then((responseText) => {
+          resolve(JSON.parse(responseText));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
   },
   //Key
   key: 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE'
