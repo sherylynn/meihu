@@ -159,9 +159,10 @@ export default class Me extends Component {
                 component: Resume,
                 params: {
                     title: title,
-                    Login: function(fuck) {
+                    Login: function(fuck,user) {
                         _this.setState({
-                            Login:fuck
+                            Login:fuck,
+                            user:user
                         })
                     }
                 },

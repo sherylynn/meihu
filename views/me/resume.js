@@ -32,10 +32,16 @@ export default class Resume extends Component {
         super(props);
         this.state = {
             title: null,
+            /*
             username: 'lynn',
             email: '352281674@qq.com',
             password: '1234',
             re_password: '1234',
+            */
+            username: '',
+            email: '',
+            password: '',
+            re_password: '',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -71,7 +77,7 @@ export default class Resume extends Component {
                     'userid': user.userid,
                     'email': user.email,
                 })
-                this._flash();
+                this._flash(user);
             } catch (err) {
                 if (!err) {
                     this.setState({
@@ -132,7 +138,7 @@ export default class Resume extends Component {
                     'token': user.token,
                     'email': user.email,
                 });
-                this._flash();
+                this._flash(user);
             } catch (err) {
                 if (!err) {
                     this.setState({
@@ -226,10 +232,10 @@ export default class Resume extends Component {
         }
     }
     
-    _flash() {
+    _flash(user) {
         const {navigator} = this.props;
         if(this.props.Login) {
-                this.props.Login(false);
+                this.props.Login(false,user);
             }
         const routers = navigator.getCurrentRoutes();
         console.log(routers);

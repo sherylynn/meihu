@@ -12,6 +12,9 @@ or
 react-native run-ios
 ```
 
+### TODO：
+封闭分离数据库
+
 ### 依赖项：
 ```
 "dependencies": {

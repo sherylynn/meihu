@@ -22,7 +22,8 @@
     "pouchdb-auth": "^2.0.1",
     "serve-favicon": "~2.2.0",
     "supervisor": "^0.7.1",
-    "xss": "^0.2.7"
+    "xss": "^0.2.7",
+    "showdown":"^1.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
