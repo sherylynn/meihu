@@ -20,7 +20,25 @@ var kankan = {
     console.log(req.params.md);
   },
   getkankanList: function(req, res) {
+    var FS_PATH_SERVICES = './views/kankan/';
+    var REQUIRE_PATH_SERVICES = './kankan/';
 
+
+    fs.readdir(FS_PATH_SERVICES, function(err, list) {
+      if (err) {
+        throw '没有找到该文件夹，请检查......'
+      }
+      console.log(list);
+      return res.send({
+          list: list
+        })
+        /*
+        for (var e; list.length && (e = list.shift());) {
+          var service = require(REQUIRE_PATH_SERVICES + e);
+          service.init && service.init(app);
+        }
+        */
+    });
   },
   //增加公告消息
   addkankan: function(req, res) {
