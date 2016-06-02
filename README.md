@@ -14,6 +14,7 @@ react-native run-ios
 
 ### TODO：
 封闭分离数据库
+promise 提供api 分辨率布局
 
 ### 依赖项：
 ```
