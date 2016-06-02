@@ -20,7 +20,10 @@ app.set('view engine', 'ejs');
 app.engine('md', function(path, options, fn) {
   fs.readFile(path, 'utf8', function(err, str) {
     if (err) return fn(err);
-    str = converter.makeHtml(str);
+    //str = '<head><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/kankan/css/index.css" media="all" rel="stylesheet"></head><div id="all"' + converter.makeHtml(str) + '</div>';
+    //str = '<head><style>#box{width:595;margin: auto}</style></head><div id="box">' + converter.makeHtml(str) + '</div>';
+    str = '<head><link href="/kankan/css/index.css" media="all" rel="stylesheet" /></head><div id="all"' + converter.makeHtml(str) + '</div>';
+
     fn(null, str);
   });
 });

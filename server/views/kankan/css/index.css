@@ -1,0 +1,8 @@
+@media only screen and (-Webkit-max-device-pixel-ratio: 1.5) {
+    /* 当设备像素比小于1.5的时候... */
+    #all {width:595;margin:auto}
+}
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5) {
+    /* 当设备像素比不小于1.5的时候... */
+
+}

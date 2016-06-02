@@ -4,6 +4,7 @@ var showdown = require('showdown');
 var kankan = {
   init: function(app) {
     app.get('/kankan/get/:md', this.getkankan);
+    app.get('/kankan/getList', this.getkankanList);
     app.post('/kankan/add', this.addkankan);
   },
 
@@ -18,7 +19,9 @@ var kankan = {
     }
     console.log(req.params.md);
   },
+  getkankanList: function(req, res) {
 
+  },
   //增加公告消息
   addkankan: function(req, res) {
     var token = req.param('token');
