@@ -35,8 +35,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'views')));
-
-app.use('/db', require('express-pouchdb')(PouchDB));
+//为了防止user数据库出问题，用户数据用couchdb处理
+app.use('/db', require('express-pouchdb')(PouchDB, {
+  mode: 'minimumForPouchDB',
+  overrideMode: {
+    include: ['routes/fauxton']
+  }
+}));
 var shit = new PouchDB('shit')
 
 var server = http.createServer(app);

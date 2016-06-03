@@ -67,7 +67,40 @@ export default class Kankan extends Component {
                 .cloneWithPages(BANNER_IMGS)
         };
     }
-
+    async getList(){
+        var path = Service.host + Service.getkankanList;
+        var data = await Util.post_promise(path, {
+            email: email,
+            password: password,
+            deviceId: DeviceInfo.getUniqueID(),
+        })
+    }
+    async componentDidMount() {
+        try {
+            var path = Service.host + Service.loginByToken;
+            var data = await Util.post_promise(path, { token: doc.token });
+            if (data.status) {
+                console.log(data.data)
+                this.setState({
+                    Login: false,
+                    user:{
+                        username:data.data['username']
+                    }
+                });
+            } else {
+                this._logout();
+                this.setState({
+                    Login: true
+                })
+            }
+        } catch (err) {
+            console.log(err);
+            this._logout();
+            this.setState({
+                Login: true
+            })
+        }
+    }
     _selectDiscover(discover: Object) {
         const {navigator} = this.props;
         if (navigator) {

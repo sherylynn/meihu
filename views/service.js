@@ -5,6 +5,8 @@ var Service = {
   login: '/user/login',
   loginByToken: '/user/login/token',
   getUser: '/user/get',
+  getkankanList:'/kankan/getList',
+  getkankan:'kankan/get',
   createUser: '/user/create',
   getMessage: '/message/get',
   addMessage: '/message/add',
