@@ -59,7 +59,7 @@ let _renderPagination = function (index, total, context) {
     )
 };
 
-export default class Discover extends Component {
+export default class Kankan extends Component {
     constructor() {
         super();
         this.state = {

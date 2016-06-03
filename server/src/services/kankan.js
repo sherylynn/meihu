@@ -1,18 +1,16 @@
-'use strict';
-
 var fs = require('fs');
 var util = require('./../util');
 var showdown = require('showdown');
 var kankan = {
-  init: function (app) {
+  init: function(app) {
     app.get('/kankan/get/:md', this.getkankan);
     app.get('/kankan/getList', this.getkankanList);
     app.post('/kankan/add', this.addkankan);
   },
 
   //获取公告消息
-  getkankan: function (req, res) {
-    let filterText = '.md';
+  getkankan: function(req, res) {
+    let filterText = '.md'
     let filterRegex = new RegExp(String(filterText), 'i');
     if (filterRegex.test(req.params.md)) {
       res.render('./kankan/' + req.params.md, {
@@ -21,28 +19,29 @@ var kankan = {
     }
     console.log(req.params.md);
   },
-  getkankanList: function (req, res) {
+  getkankanList: function(req, res) {
     var FS_PATH_SERVICES = './views/kankan/';
     var REQUIRE_PATH_SERVICES = './kankan/';
 
-    fs.readdir(FS_PATH_SERVICES, function (err, list) {
+
+    fs.readdir(FS_PATH_SERVICES, function(err, list) {
       if (err) {
-        throw '没有找到该文件夹，请检查......';
+        throw '没有找到该文件夹，请检查......'
       }
       console.log(list);
       return res.send({
-        list: list
-      });
-      /*
-      for (var e; list.length && (e = list.shift());) {
-        var service = require(REQUIRE_PATH_SERVICES + e);
-        service.init && service.init(app);
-      }
-      */
+          list: list
+        })
+        /*
+        for (var e; list.length && (e = list.shift());) {
+          var service = require(REQUIRE_PATH_SERVICES + e);
+          service.init && service.init(app);
+        }
+        */
     });
   },
   //增加公告消息
-  addkankan: function (req, res) {
+  addkankan: function(req, res) {
     var token = req.param('token');
     var message = req.param('message');
     if (!token || !message) {
@@ -52,7 +51,7 @@ var kankan = {
       });
     }
     //根据token查询
-    fs.readFile(USER_PATH, function (err, data) {
+    fs.readFile(USER_PATH, function(err, data) {
       if (err) {
         return res.send({
           status: 0,
@@ -85,6 +84,7 @@ var kankan = {
           status: 0,
           err: 'token认证失败'
         });
+
       } catch (e) {
         return res.send({
           status: 0,
@@ -92,6 +92,7 @@ var kankan = {
         });
       }
     });
+
   }
 
 };

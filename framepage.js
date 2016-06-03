@@ -23,9 +23,9 @@ let MESSAGE_TAB = 'messageTab';
 let MESSAGE_NORMAL = require('./images/icon_message_nor.png');
 let MESSAGE_PRESS = require('./images/icon_message_pre.png');
 
-let DISCOVER_TAB = 'discoverTab';
-let DISCOVER_NORMAL = require('./images/icon_find_nor.png');
-let DISCOVER_PRESS = require('./images/icon_find_pre.png');
+let KANKAN_TAB = 'kankanTab';
+let KANKAN_NORMAL = require('./images/icon_find_nor.png');
+let KANKAN_PRESS = require('./images/icon_find_pre.png');
 
 let ME_TAB = 'meTab';
 let ME_NORMAL = require('./images/icon_user_nor.png');
@@ -34,7 +34,7 @@ let ME_PRESS = require('./images/icon_user_pre.png');
 import TabNavigator from 'react-native-tab-navigator';
 import RouteHome from './routehome';
 import Message from './views/message';
-import Discover from  './views/discover';
+import Kankan from  './views/kankan';
 import RouteMe from './routeme';
 
 //获取服务器上化妆品信息
@@ -89,8 +89,8 @@ export default class FramePage extends Component {
             case MESSAGE_TAB:
                 renderView = <Message />;
                 break;
-            case DISCOVER_TAB:
-                renderView = <Discover />;
+            case KANKAN_TAB:
+                renderView = <Kankan />;
                 break;
             case ME_TAB:
                 renderView = <RouteMe />;
@@ -115,7 +115,7 @@ export default class FramePage extends Component {
                     tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem(HOME_NORMAL, HOME_PRESS, HOME_TAB, '美乎搜搜', 0, this._createChildView(HOME_TAB)) }
                     {this._renderTabItem(MESSAGE_NORMAL, MESSAGE_PRESS, MESSAGE_TAB, '消息', 5, this._createChildView(MESSAGE_TAB)) }
-                    {this._renderTabItem(DISCOVER_NORMAL, DISCOVER_PRESS, DISCOVER_TAB, '美乎看看', 0, this._createChildView(DISCOVER_TAB)) }
+                    {this._renderTabItem(KANKAN_NORMAL, KANKAN_PRESS, KANKAN_TAB, '美乎看看', 0, this._createChildView(KANKAN_TAB)) }
                     {this._renderTabItem(ME_NORMAL, ME_PRESS, ME_TAB, '我的', 0, this._createChildView(ME_TAB)) }
                 </TabNavigator>
             </View>
