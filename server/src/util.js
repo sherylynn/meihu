@@ -8,7 +8,7 @@
  */
 
 var crypto = require('crypto');
-
+var fs = require('fs');
 module.exports = {
 
   guid: function() {
@@ -19,15 +19,37 @@ module.exports = {
     }).toUpperCase();
   },
 
-  md5: function(password){
+  md5: function(password) {
     var md5 = crypto.createHash('md5');
     var salt = '(!%$88hs@gophs*)#sassb9';
     var newPwd = md5.update(password + salt).digest('hex');
     return newPwd;
   },
 
-  getKey: function(){
+  getKey: function() {
     return 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE';
+  },
+  readdir: function(PATH) {
+    return new Promise((resolve, reject) => {
+      fs.readdir(PATH, function(err, list) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(list);
+        }
+      })
+    })
+  },
+  readFile: function(file) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      })
+    })
   }
 
 };

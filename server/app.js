@@ -6,6 +6,7 @@ var express = require('express'),
   logger = require('morgan'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
+  multer = require('multer'),
   async = require('async'),
   routes = require('./routes/routes'),
   app = express(),
@@ -41,7 +42,7 @@ app.use('/db', require('express-pouchdb')(PouchDB, {
   overrideMode: {
     include: ['routes/fauxton']
   }
-}));
+})); //目前版本非根目录下utils是不可以使用的，若根目录则kankan不能使用，会被db截取
 var shit = new PouchDB('shit')
 
 var server = http.createServer(app);

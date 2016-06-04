@@ -2,43 +2,234 @@ var fs = require('fs');
 var util = require('./../util');
 var USER_PATH = './database/user.json';
 var PouchDB = require('pouchdb');
-PouchDB.plugin(require('pouchdb-find'));
+PouchDB.plugin(require('pouchdb-auth')); //pouchdb-auth可以在内置使用，另一个认证的只能在浏览器
+PouchDB.plugin(require('pouchdb-find')); //麻痹不兼容couchdb1.x
+var db = 'http://localhost:3456/shit';
+var db_auth = new PouchDB('http://localhost:3456/_users');
+/*
+try {
+  let r = await db_auth.useAsAuthenticationDB();
+} catch (err) {
+  console.log(err)
+}*/
+db_auth.useAsAuthenticationDB()
+  .then(function() {
+    // db is now ready to be used as users database, with all behavior
+    // of CouchDB's `_users` database applied
+
+  })
+
+//var db = 'shit';
 //尝试不在开始声明以便删除数据库
 //var db_user = new PouchDB('shit');
 var User = {
 
-  init: function (app) {
+  init: function(app) {
     console.log('已经加载');
-    app.get('/user/destroy', this.destroyUser)
-    app.post('/user/get', this.getUser);
+    //app.get('/user/destroy', this.destroyUser)
+    //app.post('/user/get', this.getUser);
     app.post('/user/create', this.addUser);
+    app.post('/user/create', this.addUser_auth);
     app.post('/user/login', this.login);
     app.post('/user/login/token', this.loginByToken);
     app.post('/user/password/update', this.updatePassword);
     app.post('/user/delete', this.deleteUser);
   },
+  addUser_auth: async function(req, res) {
+    console.log(req.body);
+    var username = req.body.username;
+    var password = util.md5(req.body.password);
+    var re_password = util.md5(req.body.re_password);
+    var deviceId = req.body.deviceId;
+    var email = req.body.email;
+    var token = util.guid() + deviceId;
+    if (!username || !password || !re_password || !email) {
+      return res.send({
+        status: 0,
+        data: '信息填写不全'
+      });
+    } else if (password != re_password) {
+      return res.send({
+        status: 0,
+        data: '两次密码不一致'
+      });
+    } else {
+      try {
+        let ok = await db_auth.signUp(email, password, {
+          metadata: {
+            username: username,
+            time: new Date(),
+            token: token
+          }
+        }); //能使用
+        let response = await db_auth.logIn(email, password)
+        console.log(response);
+        let metadata = await db_auth.getUser(email);
+        console.log(metadata);
+        return res.send({
+          status: 1,
+          data: {
+            username: username,
+            email: email,
+            token: token
+          }
+        });
+      } catch (err) {
+        console.log(err + "1")
+        if (err["reason"] == "Document update conflict") {
+          return res.send({
+            status: 0,
+            data: '这个邮箱已经被注册使用'
+          });
+        }; //已经注册会给个报错叫409 document
+      }
+    }
+  },
+  login_auth: async function(req, res) {
+    var email = req.body.email;
+    var password = util.md5(req.body.password);
+    var deviceId = req.body.deviceId;
+    var token = util.guid() + deviceId;
+    try {
+      let ok = await db_auth.logIn(email, password)
+        //let update=await db_auth.putUser(email,
+      if (doc['password'] == password) {
+        var response = await db_user.put({
+          _id: email,
+          _rev: doc._rev,
+          email: email,
+          password: password,
+          username: doc['username'],
+          'token': token
+        });
+        return res.send({
+          status: 1,
+          data: {
+            email: email,
+            username: doc['username'],
+            token: token
+          }
+        });
+      } else {
+        console.log(password);
+        console.log(doc['password']);
+        console.log(doc);
+        return res.send({
+          status: 0,
+          data: '密码错误'
+        });
+      }
 
-  destroyUser: function (req, res) {
-    var db_user = new PouchDB('shit');
-    db_user.destroy().then(function (response) {
+    } catch (err) {
+      console.log(err);
+      return res.send({
+        status: 0,
+        data: '请检查是否是注册过的邮箱'
+      });
+    }
+    /*
+    var r_index = await db_user.createIndex({
+      index: {
+        fields: ['email', 'password']
+      }
+    });
+    console.log(r_index);
+    try {
+      var r_email = await db_user.find({
+        selector: {
+          email: email
+        }
+      })
+      if (r_email['docs'][0]['password'] == password) {
+        try {
+          var r_all = await db_user.put({
+            _id: r_email['docs'][0]['_id'],
+            _rew: r_email['docs'][0]['_rev'],
+            'token': token
+          })
+          return res.send({
+            status: 1,
+            data: r_email['docs'][0].s
+          });
+        } catch (error) {
+          console.log(error);
+          return res.send({
+            status: 0,
+            data: '出故障了'
+          });
+        }
+      } else {
+        return res.send({
+          status: 0,
+          data: '密码错误'
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      return res.send({
+        status: 0,
+        data: '请检查是否是注册过的邮箱'
+      });
+    }
+    */
+    /*
+    db_user.createIndex({
+      index: {
+        fields: ['email', 'password']
+      }
+    }).then(function (r) {
+      console.log(r);
+      return db_user.find({
+        selector: {
+          $and: [
+            { email: email },
+            { password: password }
+          ]
+        }
+      })
+    }).then(function (r) {
+      return db_user.put({
+        _id: r['docs'][0]['_id'],
+        _rew: r['docs'][0]['_rev'],
+        'token': token
+      })
+    }).then(function () {
+      return res.send({
+        status: 1,
+        data: r['docs'][0].s
+      });
+    }).catch(function (err) {
+      if (err) {
+        console.log(err);
+        return res.send({
+          status: 0,
+          data: '邮箱或者密码错误'
+        });
+      }
+    })
+    */
+  },
+  destroyUser: function(req, res) {
+    var db_user = new PouchDB(db);
+    db_user.destroy().then(function(response) {
       return res.send({
         status: 0,
         data: '数据库已经重建'
       });
-    }).catch(function (err) {
+    }).catch(function(err) {
       console.log(err);
     });
   },
   //获取用户信息
-  getUser: function (req, res) {
-    var key = req.param('key');
+  getUser: function(req, res) {
+    var key = req.body.key;
     if (key !== util.getKey()) {
       return res.send({
         status: 0,
         data: '使用了没有鉴权的key'
       });
     }
-    fs.readFile(USER_PATH, function (err, data) {
+    fs.readFile(USER_PATH, function(err, data) {
       if (!err) {
         try {
           var obj = JSON.parse(data);
@@ -69,13 +260,14 @@ var User = {
   },
 
   //添加用户
-  addUser: async function (req, res) {
-    var db_user = new PouchDB('shit');
-    var username = req.param('username');
-    var password = util.md5(req.param('password'));
-    var re_password = util.md5(req.param('re_password'));
-    var deviceId = req.param('deviceId');
-    var email = req.param('email');
+  addUser: async function(req, res) {
+    var db_user = new PouchDB(db);
+    console.log(req.body);
+    var username = req.body.username;
+    var password = util.md5(req.body.password);
+    var re_password = util.md5(req.body.re_password);
+    var deviceId = req.body.deviceId;
+    var email = req.body.email;
     var token = util.guid() + deviceId;
     if (!username || !password || !re_password || !email) {
       return res.send({
@@ -88,12 +280,22 @@ var User = {
         data: '两次密码不一致'
       });
     } else {
-      var r_index = await db_user.createIndex({
-        index: {
-          fields: ['username']
-        }
-      });
-      console.log(r_index);
+      try {
+        var r_index = await db_user.createIndex({
+          index: {
+            fields: ['username']
+          }
+        });
+
+        console.log(r_index);
+      } catch (err) {
+        console.log(err);
+        return res.send({
+          status: 0,
+          data: '远程建立索引出错'
+        })
+      }
+
       try {
         var r_username = await db_user.find({
           selector: {
@@ -292,11 +494,11 @@ var User = {
   },
 
   //用户登录
-  login: async function (req, res) {
-    var db_user = new PouchDB('shit');
-    var email = req.param('email');
-    var password = util.md5(req.param('password'));
-    var deviceId = req.param('deviceId');
+  login: async function(req, res) {
+    var db_user = new PouchDB(db);
+    var email = req.body.email;
+    var password = util.md5(req.body.password);
+    var deviceId = req.body.deviceId;
     var token = util.guid() + deviceId;
     try {
       var doc = await db_user.get(email);
@@ -304,9 +506,9 @@ var User = {
         var response = await db_user.put({
           _id: email,
           _rev: doc._rev,
-          email:email,
-          password:password,
-          username:doc['username'],
+          email: email,
+          password: password,
+          username: doc['username'],
           'token': token
         });
         return res.send({
@@ -418,9 +620,9 @@ var User = {
   },
 
   //通过token登录
-  loginByToken: async function (req, res) {
-    var db_user = new PouchDB('shit');
-    var token = req.param('token');
+  loginByToken: async function(req, res) {
+    var db_user = new PouchDB(db);
+    var token = req.body.token;
     var r_index = await db_user.createIndex({
       index: {
         fields: ['token']
@@ -483,10 +685,10 @@ var User = {
   },
 
   //用户修改密码
-  updatePassword: function (req, res) {
-    var token = req.param('token');
-    var oldPassword = util.md5(req.param('oldPassword'));
-    var password = util.md5(req.param('password'));
+  updatePassword: function(req, res) {
+    var token = req.body.token;
+    var oldPassword = util.md5(req.body.oldPassword);
+    var password = util.md5(req.body.password);
 
     var content = JSON.parse(fs.readFileSync(USER_PATH));
     for (var i in content) {
@@ -508,9 +710,9 @@ var User = {
   },
 
   //删除用户
-  deleteUser: function (req, res) {
-    var token = req.param('token');
-    var email = req.param('email');
+  deleteUser: function(req, res) {
+    var token = req.body.token;
+    var email = req.body.email;
 
     var content = JSON.parse(fs.readFileSync(USER_PATH));
     for (var i in content) {

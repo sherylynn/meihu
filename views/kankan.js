@@ -13,6 +13,7 @@ import {
     Text,
     TextInput,
     View,
+    Alert,
     ScrollView,
     TouchableHighlight
 } from 'react-native';
@@ -26,29 +27,30 @@ import ViewPager from 'react-native-viewpager';
 import DiscoverCell  from './discover/discover-cell';
 import DiscoverDetail from './discover/discover-detail';
 //import DiscoverData from './discover/discover-data';
-import DiscoverData from "../test/testData"
-import Util from './util.js'
+import DiscoverData from "../test/testData";
+import Util from './util.js';
+import Service from './service.js';
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 let BANNER_IMGS = [
-    require('../images/fangshai.jpg'),
-    require('../images/fangshai1.jpg'),
-    require('../images/fangshai2.jpg'),
-    require('../images/ruye.jpg'),
-    require('../images/hufu.jpg'),
-    require('../images/hufu--1.jpg'),
-    require('../images/hufu--2.jpg'),
-    require('../images/hufu--3.jpg'),
-    require('../images/hufu--4.jpg'),
-    require('../images/hufu5.jpg'),
-    require('../images/chungao.jpg'),
-    require('../images/xilian.gif'),
-    require('../images/makeup.jpg'),
-    require('../images/clock.jpg'),
-    require('../images/low.jpg'),
-    require('../images/dou.jpg'),
+  Service.host+'/kankan/'+'h001.jpg',
+  Service.host+'/kankan/'+'h002.jpg',
+  Service.host+'/kankan/'+'h003.jpg',
+  Service.host+'/kankan/'+'h004.jpg',
+  Service.host+'/kankan/'+'h005.jpg',
+  Service.host+'/kankan/'+'h006.jpg',
 ];
-
+/*
+var BANNER_IMGS = [
+  'https://images.unsplash.com/photo-1441742917377-57f78ee0e582?h=1024',
+  'https://images.unsplash.com/photo-1441716844725-09cedc13a4e7?h=1024',
+  'https://images.unsplash.com/photo-1441448770220-76743f9e6af6?h=1024',
+  'https://images.unsplash.com/photo-1441260038675-7329ab4cc264?h=1024',
+  'https://images.unsplash.com/photo-1441126270775-739547c8680c?h=1024',
+  'https://images.unsplash.com/photo-1440964829947-ca3277bd37f8?h=1024',
+  'https://images.unsplash.com/photo-1440847899694-90043f91c7f9?h=1024'
+];
+*/
 let _renderPagination = function (index, total, context) {
     return (
         <View style={styles.pagination_wrapper}>
@@ -67,38 +69,26 @@ export default class Kankan extends Component {
                 .cloneWithPages(BANNER_IMGS)
         };
     }
-    async getList(){
-        var path = Service.host + Service.getkankanList;
-        var data = await Util.post_promise(path, {
-            email: email,
-            password: password,
-            deviceId: DeviceInfo.getUniqueID(),
-        })
-    }
-    async componentDidMount() {
+    async componentWillMount() {
         try {
-            var path = Service.host + Service.loginByToken;
-            var data = await Util.post_promise(path, { token: doc.token });
+            let path = Service.host + Service.getkankanList;
+            let data = await Util.post_promise(path, {});
             if (data.status) {
                 console.log(data.data)
+                function img_source(srcList){
+                    return Service.host +srcList.img;
+                }
+                Alert.alert(data.data.map(img_source));
                 this.setState({
-                    Login: false,
-                    user:{
-                        username:data.data['username']
-                    }
+                    pagerSource: new ViewPager.DataSource({ pageHasChanged: (p1, p2) => p1 !== p2 })
+                .cloneWithPages(data.data.map(img_source))
                 });
             } else {
-                this._logout();
-                this.setState({
-                    Login: true
-                })
+                Alert.alert('出错啦',data.err)
             }
         } catch (err) {
             console.log(err);
-            this._logout();
-            this.setState({
-                Login: true
-            })
+            Alert.alert('出错啦','服务器出小差啦')
         }
     }
     _selectDiscover(discover: Object) {
@@ -107,7 +97,7 @@ export default class Kankan extends Component {
             navigator.push({
                 title: discover.title,
                 component: DiscoverDetail,
-                passProps: { discover:discover }
+                passProps: { discover: discover }
             });
         }
     }
@@ -117,10 +107,20 @@ export default class Kankan extends Component {
             <DiscoverCell onSelect={() => this._selectDiscover(discoverData) } discoverData={discoverData} />
         );
     }
-
+    _renderPage(
+        data: Object,
+        pageID: number | string, ) {
+        return (
+            <Image
+                source={{ uri: data }}
+                style={styles.page} />
+        );
+    }
+    /*
     _renderPage(data) {
         return (<Image source={data} style={styles.page} />)
     }
+    */
 
     render() {
         const dataSource = ds.cloneWithRows(DiscoverData)

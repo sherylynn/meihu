@@ -10,7 +10,7 @@
  */
 
 var crypto = require('crypto');
-
+var fs = require('fs');
 module.exports = {
 
   guid: function () {
@@ -30,6 +30,28 @@ module.exports = {
 
   getKey: function () {
     return 'HSHHSGSGGSTWSYWSYUSUWSHWBS-REACT-NATIVE';
+  },
+  readdir: function (PATH) {
+    return new Promise((resolve, reject) => {
+      fs.readdir(PATH, function (err, list) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(list);
+        }
+      });
+    });
+  },
+  readFile: function (file) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
   }
 
 };

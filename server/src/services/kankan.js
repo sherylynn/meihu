@@ -4,7 +4,7 @@ var showdown = require('showdown');
 var kankan = {
   init: function(app) {
     app.get('/kankan/get/:md', this.getkankan);
-    app.get('/kankan/getList', this.getkankanList);
+    app.post('/kankan/getList', this.getkankanList);
     app.post('/kankan/add', this.addkankan);
   },
 
@@ -19,26 +19,51 @@ var kankan = {
     }
     console.log(req.params.md);
   },
-  getkankanList: function(req, res) {
-    var FS_PATH_SERVICES = './views/kankan/';
+  getkankanList: async function(req, res) {
+    var FS_PATH = './views/kankan/';
     var REQUIRE_PATH_SERVICES = './kankan/';
+    let filterText = '.md';
+    let filterRegex = new RegExp(String(filterText), 'i');
+    let filter = (example) => filterRegex.test(example);
+    let list = await util.readdir(FS_PATH);
+    let md_list = list.filter(filter);
+    let json = [];
+    try {
+      for (var e; md_list.length && (e = md_list.shift());) {
+        let data = await util.readFile(FS_PATH + e);
+        let title = data.split("##", 3)[1];
+        let subtitle = data.split("##", 3)[2].split("\n", 1)[0];
+        json.push({
+          title: title,
+          subtitle: subtitle,
+          url: '/kankan/get/' + e,
+          img: '/kankan/' + e.split('.md')[0] + '.jpg'
+        })
+      }
+      return res.send({
+        status: 1,
+        data: json
+      });
+    } catch (err) {
+      return res.send({
+        status: 0,
+        err: '服务器开小差了'
+      });
+    }
 
 
+    /*
+      
     fs.readdir(FS_PATH_SERVICES, function(err, list) {
       if (err) {
         throw '没有找到该文件夹，请检查......'
       }
       console.log(list);
       return res.send({
-          list: list
-        })
-        /*
-        for (var e; list.length && (e = list.shift());) {
-          var service = require(REQUIRE_PATH_SERVICES + e);
-          service.init && service.init(app);
-        }
-        */
+        list: list
+      })
     });
+    */
   },
   //增加公告消息
   addkankan: function(req, res) {
