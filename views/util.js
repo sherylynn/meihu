@@ -16,7 +16,7 @@ var Util = {
   },
 
   //post请求
-  post: function (url, data, callback) {
+  post: function(url, data, callback) {
     //console.log(data);
     //console.log(JSON.stringify(data));
     var fetchOptions = {
@@ -35,22 +35,36 @@ var Util = {
         callback(JSON.parse(responseText));
       });
   },
-  post_promise: function (url, data) {
+  post_promise: function(url, data) {
     return new Promise((resolve, reject) => {
       fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
         .then((response) => response.text())
         .then((responseText) => {
           resolve(JSON.parse(responseText));
         })
         .catch((error) => {
           reject(error);
+        });
+    })
+  },
+  get_json: function(reqUrl) {
+    return new Promise((resolve, reject) => {
+      fetch(reqUrl)
+        .then((response) => response.json())
+        .then((responseData) => {
+          //console.log(responseData);
+          resolve(responseData);
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
         });
     })
   },

@@ -69,28 +69,35 @@ export default class Kankan extends Component {
                 .cloneWithPages(BANNER_IMGS)
         };
     }
+    /*
     async componentWillMount() {
         try {
             let path = Service.host + Service.getkankanList;
             let data = await Util.post_promise(path, {});
             if (data.status) {
                 console.log(data.data)
+                //console.log(data.data.img)
+                
                 function img_source(srcList){
                     return Service.host +srcList.img;
                 }
                 Alert.alert(data.data.map(img_source));
+                
+                
                 this.setState({
                     pagerSource: new ViewPager.DataSource({ pageHasChanged: (p1, p2) => p1 !== p2 })
                 .cloneWithPages(data.data.map(img_source))
                 });
+                
             } else {
-                Alert.alert('出错啦',data.err)
+                Alert.alert('出错啦','什么鬼')
             }
         } catch (err) {
             console.log(err);
             Alert.alert('出错啦','服务器出小差啦')
         }
     }
+    */
     _selectDiscover(discover: Object) {
         const {navigator} = this.props;
         if (navigator) {

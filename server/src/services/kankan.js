@@ -4,7 +4,7 @@ var showdown = require('showdown');
 var kankan = {
   init: function(app) {
     app.get('/kankan/get/:md', this.getkankan);
-    app.post('/kankan/getList', this.getkankanList);
+    app.get('/kankan/getList', this.getkankanList);
     app.post('/kankan/add', this.addkankan);
   },
 
