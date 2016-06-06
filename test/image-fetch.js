@@ -1,7 +1,17 @@
 
-import React, { Component, }from 'react'
-import {AppRegistry, View, Image, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import Util from './../views/util.js';
+import React, {
+    Component,
+} from 'react'
+import {
+    AppRegistry,
+    View,
+    Image,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert
+} from 'react-native';import Util from './../views/util.js';
 import Service from './../views/service.js';
 
 
@@ -23,7 +33,7 @@ class Example extends Component {
                 }
                 console.log(data.data.map(img_source));
                 this.setState({
-                    src: data.data.map(img_source)[0]
+                    src: data.data.map(img_source)[9]
                 })
             } else {
                 Alert.alert('出错啦', '什么鬼')
@@ -44,11 +54,16 @@ class Example extends Component {
 
             </Text>
 
-            <Image
+            <Image style={styles.thumb}
                 source={{ uri: this.state.src }}
                 />
         </View>
     }
 }
-const styles=
+const styles=StyleSheet.create({
+    thumb: {
+        width: 30,
+        height: 30
+    },
+})
 AppRegistry.registerComponent('meihu', () => Example);
