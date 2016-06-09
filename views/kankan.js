@@ -69,11 +69,10 @@ export default class Kankan extends Component {
                 .cloneWithPages(BANNER_IMGS)
         };
     }
-    /*
     async componentWillMount() {
         try {
             let path = Service.host + Service.getkankanList;
-            let data = await Util.post_promise(path, {});
+            let data = await Util.get_json(path);
             if (data.status) {
                 console.log(data.data)
                 //console.log(data.data.img)
@@ -81,9 +80,7 @@ export default class Kankan extends Component {
                 function img_source(srcList){
                     return Service.host +srcList.img;
                 }
-                Alert.alert(data.data.map(img_source));
-                
-                
+                console.log(data.data.map(img_source));
                 this.setState({
                     pagerSource: new ViewPager.DataSource({ pageHasChanged: (p1, p2) => p1 !== p2 })
                 .cloneWithPages(data.data.map(img_source))
@@ -97,7 +94,6 @@ export default class Kankan extends Component {
             Alert.alert('出错啦','服务器出小差啦')
         }
     }
-    */
     _selectDiscover(discover: Object) {
         const {navigator} = this.props;
         if (navigator) {
