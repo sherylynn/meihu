@@ -1,5 +1,3 @@
-'use strict';
-
 var fs = require('fs');
 var util = require('./../util');
 var MAKEUP_PATH = './database/天然护肤品原料.json';
@@ -76,7 +74,8 @@ var Makeup = {
               "makeupid": util.guid(),
               userid: obj[i].userid,
               username: obj[i].username,
-              time: new Date().getFullYear() + '-' + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate(),
+              time: new Date().getFullYear() + '-'
+              + (parseInt(new Date().getMonth()) + 1) + '-' + new Date().getDate(),
               'en': en,
               "zh": zh,
               "tag": tag,
@@ -95,6 +94,7 @@ var Makeup = {
           status: 0,
           err: 'token认证失败'
         });
+
       } catch (e) {
         return res.send({
           status: 0,
@@ -102,6 +102,7 @@ var Makeup = {
         });
       }
     });
+
   }
 
 };

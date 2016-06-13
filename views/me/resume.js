@@ -11,6 +11,7 @@ import {
     BackAndroid,
     StyleSheet,
     View,
+    Alert,
     ScrollView,
     Image,
     Text,
@@ -32,8 +33,16 @@ export default class Resume extends Component {
         super(props);
         this.state = {
             title: null,
-            password: '',
+            /*
+            username: 'lynn',
+            email: '352281674@qq.com',
+            password: '1234',
+            re_password: '1234',
+            */
+            username: '',
             email: '',
+            password: '',
+            re_password: '',
             showIndex: {
                 height: 0,
                 opacity: 0
@@ -46,39 +55,123 @@ export default class Resume extends Component {
         };
 
     }
-    _login() {
+    async _login() {
+        //Alert.alert('登录', '这是登录的按钮');
+        let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
         var email = this.state.email;
         var password = this.state.password;
         var path = Service.host + Service.login;
-        var that = this;
 
-        //隐藏登录页 & 加载loading
-        that.setState({
-            showLogin: {
-                height: 0,
-                width: 0,
-                flex: 0,
-            },
-            isLoadingShow: true
-        });
-        Util.post(path, {
+        var data = await Util.post_promise(path, {
             email: email,
             password: password,
             deviceId: DeviceInfo.getUniqueID(),
-        }, function (data) {
-            if (data.status) {
-                var user = data.data;
-                //加入数据到本地
-                db_local.put({
-                    _id:'user',
-                    'username':user.username,
+        })
+        if (data.status) {
+            var user = data.data;
+            //加入数据到本地
+            try {
+                var response = db_local.put({
+                    _id: 'user',
+                    'username': user.username,
                     'token': user.token,
                     'userid': user.userid,
                     'email': user.email,
-                }).then(
-                    function () {
-                        
-                    }
+                })
+                this._flash(user);
+            } catch (err) {
+                if (!err) {
+                    this.setState({
+                        showLogin: {
+                            height: 0,
+                            width: 0,
+                            flex: 0,
+                        },
+                        showIndex: {
+                            flex: 1,
+                            opacity: 1
+                        },
+                        isLoadingShow: false
+                    });
+                }
+            }
+
+        } else {
+            Alert.alert('登录', data.data);
+            this.setState({
+                showLogin: {
+                    flex: 1,
+                    opacity: 1
+                },
+                showIndex: {
+                    height: 0,
+                    width: 0,
+                    flex: 0,
+                },
+                isLoadingShow: false
+            });
+        }
+
+    }
+    async _reg() {
+        //Alert.alert('注册', '这是注册的按钮');
+        let db_local = new PouchDB('me', { adapter: 'asyncstorage' })
+        let username = this.state.username;
+        let email = this.state.email;
+        let password = this.state.password;
+        let re_password = this.state.re_password;
+        let path = Service.host + Service.createUser;
+
+        var data = await Util.post_promise(path, {
+            username: username,
+            email: email,
+            password: password,
+            re_password: re_password,
+            deviceId: DeviceInfo.getUniqueID(),
+        });
+        if (data.status) {
+            var user = data.data;
+            try {
+                //var doc = await db_local.get('user');
+                var response = await db_local.put({
+                    _id: 'user',
+                    'username': user.username,
+                    'token': user.token,
+                    'email': user.email,
+                });
+                this._flash(user);
+            } catch (err) {
+                if (!err) {
+                    this.setState({
+                        showLogin: {
+                            height: 0,
+                            width: 0,
+                            flex: 0,
+                        },
+                        showIndex: {
+                            flex: 1,
+                            opacity: 1
+                        },
+                        isLoadingShow: false
+                    });
+                } else {
+                    console.log(err)
+                }
+            }
+
+
+            //加入数据到本地
+            /*
+            db_local.put({
+                _id: 'user',
+                'username': user.username,
+                'token': user.token,
+                'email': user.email,
+            }).then(
+                function () {
+                    console.log('注册成功')
+                    ()=>this._pressButton();
+                }
                 ).catch(function (err) {
                     if (!err) {
                         that.setState({
@@ -93,28 +186,26 @@ export default class Resume extends Component {
                             },
                             isLoadingShow: false
                         });
+                    }else{
+                        console.log(err)
                     }
                 });
-
-            } else {
-                AlertIOS.alert('登录', '用户名或者密码错误');
-                that.setState({
-                    showLogin: {
-                        flex: 1,
-                        opacity: 1
-                    },
-                    showIndex: {
-                        height: 0,
-                        width: 0,
-                        flex: 0,
-                    },
-                    isLoadingShow: false
-                });
-            }
-        });
-    }
-    _reg() {
-
+            */
+        } else {
+            Alert.alert('注册', data.data);
+            this.setState({
+                showLogin: {
+                    flex: 1,
+                    opacity: 1
+                },
+                showIndex: {
+                    height: 0,
+                    width: 0,
+                    flex: 0,
+                },
+                isLoadingShow: false
+            });
+        }
     }
     _getEmail() {
 
@@ -122,11 +213,12 @@ export default class Resume extends Component {
     _getPassword() {
 
     }
+
     componentWillMount() {
         if (Platform.OS === 'android') {
             BackAndroid.addEventListener('hardwareBackPress', () => this._pressButton());
         }
-        db.get('token').then(function (doc) {
+        db_local.get('token').then(function (doc) {
 
         }).then(function (response) {
             // handle response
@@ -140,7 +232,20 @@ export default class Resume extends Component {
             BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
-
+    
+    _flash(user) {
+        const {navigator} = this.props;
+        if(this.props.Login) {
+                this.props.Login(false,user);
+            }
+        const routers = navigator.getCurrentRoutes();
+        console.log(routers);
+        if (routers.length > 1) {
+            navigator.pop();
+            return true;
+        }
+        return false;
+    };
     _pressButton() {
         const {navigator} = this.props;
         const routers = navigator.getCurrentRoutes();
@@ -163,14 +268,24 @@ export default class Resume extends Component {
                 </View>
                 <View style={styles.container}>
                     <View style={styles.inputRow}>
-                        <Text>邮箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" onChangeText={(email) => this.setState({ email }) } />
+                        <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" value={this.state.email} onChangeText={(email) => this.setState({ email }) } />
                     </View>
+                    {this.props.title == '注册' ?
+                        <View style={styles.inputRow}>
+                            <Text>用户名</Text><TextInput style={styles.input} placeholder="请输入用户名" value={this.state.username} onChangeText={(username) => this.setState({ username }) } />
+                        </View> : null
+                    }
                     <View style={styles.inputRow}>
-                        <Text>密码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} onChangeText={(password) => this.setState({ password }) }/>
+                        <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} value={this.state.password} onChangeText={(password) => this.setState({ password }) }/>
                     </View>
+                    {this.props.title == '注册' ?
+                        <View style={styles.inputRow}>
+                            <Text>密　码</Text><TextInput style={styles.input} placeholder="请再次输入密码" password={true} value={this.state.re_password} onChangeText={(re_password) => this.setState({ re_password }) }/>
+                        </View> : null
+                    }
                     <View>
-                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this._login}>
-                            <Text style={{ color: '#fff' }}>登录</Text>
+                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? () => this._reg() : () => this._login() }>
+                            <Text style={{ color: '#fff' }}>{this.props.title}</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

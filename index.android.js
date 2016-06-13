@@ -10,3 +10,4 @@ import "./app-registry"; //meihu主体
 //import "./test/lazyload";真不容易啊
 //import "./test/pouchdb-test";
 //import "./test/device-id"
+//import "./test/image-fetch" //测试image 的uri source属性 和fetch json 中 array情况
