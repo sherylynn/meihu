@@ -1,12 +1,12 @@
 
 import React, { Component, }from 'react'
 import {AppRegistry, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-
-import PouchDB from 'pouchdb'
-import 'pouchdb-asyncstorage-down'
+import PouchDB from 'pouchdb-react-native'
+//import PouchDB from 'pouchdb'
+//import 'pouchdb-asyncstorage-down'
 //PouchDB.plugin(require('pouchdb-authentication'));
 //import './pouchdb.authentication.min.js'//死活注册不了这个事件 这个方法是浏览器的,强上不现实
-PouchDB.plugin(require('./pouchdb.authentication.min.js'));//这种方法引入也是不行的
+//PouchDB.plugin(require('./pouchdb.authentication.min.js'));//这种方法引入也是不行的
 //import Auth from 'pouchdb-auth'//依赖太多了,根本不可能实现
 //PouchDB.plugin(Auth)
 //const db = new PouchDB('mydb', { adapter: 'asyncstorage' })

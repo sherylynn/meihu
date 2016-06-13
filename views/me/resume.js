@@ -22,8 +22,9 @@ var DeviceInfo = require('react-native-device-info');
 import ViewPager from 'react-native-viewpager';
 import Util from '../util.js'
 var Service = require('../service.js');
-import PouchDB from 'pouchdb'
-import 'pouchdb-asyncstorage-down'
+import PouchDB from 'pouchdb-react-native'
+//import PouchDB from 'pouchdb'
+//import 'pouchdb-asyncstorage-down'
 const db_remote = new PouchDB(Service['host'] + '/db/users');
 const db_local = new PouchDB('me', { adapter: 'asyncstorage' })
 export default class Resume extends Component {
