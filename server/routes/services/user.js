@@ -62,7 +62,7 @@ var User = {
           let ok = yield db_auth.signUp(email, password, {
             metadata: {
               username: username,
-              time: new Date(),
+              time: new Date().toLocaleString(),
               token: token
             }
           }); //能使用
@@ -325,20 +325,24 @@ var User = {
             });
           } else {
             try {
+              let time = new Date().toLocaleString();
               var doc = yield db_user.put({
                 _id: email,
                 username: username,
                 email: email,
                 password: password,
-                time: new Date(),
-                token: token
+                token: token,
+                reg_time: time,
+                log_time: time
               });
               return res.send({
                 status: 1,
                 data: {
                   username: username,
                   email: email,
-                  token: token
+                  token: token,
+                  reg_time: time,
+                  log_time: time
                 }
               });
             } catch (err) {
@@ -406,7 +410,7 @@ var User = {
               });
             })
           }
-          })
+         })
         */
       }
       /*
@@ -521,20 +525,26 @@ var User = {
       try {
         var doc = yield db_user.get(email);
         if (doc['password'] == password) {
+          let time = new Date().toLocaleString();
           var response = yield db_user.put({
             _id: email,
             _rev: doc._rev,
             email: email,
             password: password,
             username: doc['username'],
-            'token': token
+            token: token,
+            reg_time: doc['reg_time'],
+            log_time: time
           });
           return res.send({
             status: 1,
             data: {
               email: email,
               username: doc['username'],
-              token: token
+              token: token,
+              reg_time: doc['reg_time'],
+              log_time: time
+
             }
           });
         } else {

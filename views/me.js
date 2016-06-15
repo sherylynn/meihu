@@ -18,6 +18,7 @@ import {
     TouchableOpacity,
     TextInput,
     Linking,
+    Clipboard
 } from 'react-native';
 
 import {
@@ -51,7 +52,18 @@ import PouchDB from 'pouchdb'
 import 'pouchdb-asyncstorage-down'
 const db_remote = new PouchDB(Service['host'] + '/db/users');
 const db_local = new PouchDB('me', { adapter: 'asyncstorage' })
+/*
 
+                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this._pressButton.bind(this, '我的收藏') }>
+                    <View>
+                        <View style={{ padding: 10, flexDirection: 'row' }}>
+                            <Image style={styles.thumb} source={require('../images/icon_user_collect.png') }/>
+                            <Text style={styles.icon_text}>收藏</Text>
+                        </View>
+                        <View style={styles.separator}/>
+                    </View>
+                </TouchableHighlight>
+*/
 export default class Me extends Component {
     constructor(props) {
         super(props);
@@ -60,8 +72,8 @@ export default class Me extends Component {
                 flex: 1,
                 opacity: 1
             },
-            user:{
-                username:'关爱每一天'
+            user: {
+                username: '关爱每一天'
             },
             Login: true,
         };
@@ -75,9 +87,7 @@ export default class Me extends Component {
                 console.log(data.data)
                 this.setState({
                     Login: false,
-                    user:{
-                        username:data.data['username']
-                    }
+                    user: data.data,
                 });
             } else {
                 this._logout();
@@ -134,14 +144,26 @@ export default class Me extends Component {
             await db_local.destroy();
             //Alert.alert('提示', '已经注销')
             this.setState({
-            Login: true,
-        })
+                Login: true,
+            })
         } catch (err) {
             console.log(err);
         }
     }
     _getEmail() {
 
+    }
+    _sendEmail() {
+        let url = "mailto:352281674@qq.com"
+        Linking.canOpenURL(url).then(supported => {
+            if (!supported) {
+                Clipboard.setString('352281674@qq.com');
+                Alert.alert('请安装邮箱软件或发送邮件,邮箱已复制到剪贴板')
+                console.log('Can\'t handle url: ' + url);
+            } else {
+                return Linking.openURL(url);
+            }
+        }).catch(err => console.error('An error occurred', err));
     }
     _getPassword() {
 
@@ -159,10 +181,12 @@ export default class Me extends Component {
                 component: Resume,
                 params: {
                     title: title,
-                    Login: function(fuck,user) {
+                    user: _this.state.user,
+                    login_state: _this.state.Login,
+                    Login: function (fuck, user) {
                         _this.setState({
-                            Login:fuck,
-                            user:user
+                            Login: fuck,
+                            user: user
                         })
                     }
                 },
@@ -179,9 +203,9 @@ export default class Me extends Component {
                     <Image source={require('../images/avatar_bg.png') }
                         style={styles.backgroundImage}>
                         <Image source={require('../images/avatar.png') } style={styles.avatar}/>
-                        <Text style={styles.name}>{this.state.Login ?'关爱每一天':this.state.user.username}</Text>
+                        <Text style={styles.name}>{this.state.Login ? '关爱每一天' : this.state.user.username}</Text>
                         {this.state.Login ?
-                            
+
                             <View style={{ flexDirection: 'row' }}>
                                 <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={() => this._pressButton('登录') }>
                                     <Text style={{ color: '#fff' }}>登录</Text>
@@ -201,35 +225,26 @@ export default class Me extends Component {
                 </View>
                 <TouchableHighlight
                     underlayColor={UNDERLAY_COLOR}
-                    onPress={() => this._pressButton('登录') }>
+                    onPress={() => this._pressButton('资料') }>
                     <View>
                         <View style={styles.icon_container}>
                             <Image source={require('../images/icon_user_resume.png') } style={styles.thumb}/>
                             <View style={{ flex: 2, flexDirection: 'row' }}>
-                                <Text style={[{ flex: 1 }, styles.icon_text]}>登录</Text>
-                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}>即将更新</Text>
+                                <Text style={[{ flex: 1 }, styles.icon_text]}>资料</Text>
+                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}>查看个人信息</Text>
                             </View>
                         </View>
                         <View style={styles.separator}/>
                     </View>
                 </TouchableHighlight>
-                <TouchableHighlight underlayColor={UNDERLAY_COLOR}>
+                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={() => this._sendEmail() }>
                     <View>
                         <View style={styles.icon_container}>
                             <Image source={require('../images/icon_forget_password.png') } style={styles.thumb}/>
                             <View style={{ flex: 2, flexDirection: 'row' }}>
-                                <Text style={[{ flex: 1 }, styles.icon_text]}>PLUS</Text>
-                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}></Text>
+                                <Text style={[{ flex: 1 }, styles.icon_text]}>反馈</Text>
+                                <Text style={[{ color: '#999', textAlign: 'right', marginTop: 8 }]}>登录邮箱发送邮件</Text>
                             </View>
-                        </View>
-                        <View style={styles.separator}/>
-                    </View>
-                </TouchableHighlight>
-                <TouchableHighlight underlayColor={UNDERLAY_COLOR} onPress={this._pressButton.bind(this, '我的收藏') }>
-                    <View>
-                        <View style={{ padding: 10, flexDirection: 'row' }}>
-                            <Image style={styles.thumb} source={require('../images/icon_user_collect.png') }/>
-                            <Text style={styles.icon_text}>收藏</Text>
                         </View>
                         <View style={styles.separator}/>
                     </View>

@@ -13,7 +13,7 @@ try {
   console.log(err)
 }*/
 db_auth.useAsAuthenticationDB()
-  .then(function() {
+  .then(function () {
     // db is now ready to be used as users database, with all behavior
     // of CouchDB's `_users` database applied
 
@@ -24,7 +24,7 @@ db_auth.useAsAuthenticationDB()
 //var db_user = new PouchDB('shit');
 var User = {
 
-  init: function(app) {
+  init: function (app) {
     console.log('已经加载');
     //app.get('/user/destroy', this.destroyUser)
     //app.post('/user/get', this.getUser);
@@ -35,7 +35,7 @@ var User = {
     app.post('/user/password/update', this.updatePassword);
     app.post('/user/delete', this.deleteUser);
   },
-  addUser_auth: async function(req, res) {
+  addUser_auth: async function (req, res) {
     console.log(req.body);
     var username = req.body.username;
     var password = util.md5(req.body.password);
@@ -58,7 +58,7 @@ var User = {
         let ok = await db_auth.signUp(email, password, {
           metadata: {
             username: username,
-            time: new Date(),
+            time: new Date().toLocaleString(),
             token: token
           }
         }); //能使用
@@ -85,14 +85,14 @@ var User = {
       }
     }
   },
-  login_auth: async function(req, res) {
+  login_auth: async function (req, res) {
     var email = req.body.email;
     var password = util.md5(req.body.password);
     var deviceId = req.body.deviceId;
     var token = util.guid() + deviceId;
     try {
       let ok = await db_auth.logIn(email, password)
-        //let update=await db_auth.putUser(email,
+      //let update=await db_auth.putUser(email,
       if (doc['password'] == password) {
         var response = await db_user.put({
           _id: email,
@@ -209,19 +209,19 @@ var User = {
     })
     */
   },
-  destroyUser: function(req, res) {
+  destroyUser: function (req, res) {
     var db_user = new PouchDB(db);
-    db_user.destroy().then(function(response) {
+    db_user.destroy().then(function (response) {
       return res.send({
         status: 0,
         data: '数据库已经重建'
       });
-    }).catch(function(err) {
+    }).catch(function (err) {
       console.log(err);
     });
   },
   //获取用户信息
-  getUser: function(req, res) {
+  getUser: function (req, res) {
     var key = req.body.key;
     if (key !== util.getKey()) {
       return res.send({
@@ -229,7 +229,7 @@ var User = {
         data: '使用了没有鉴权的key'
       });
     }
-    fs.readFile(USER_PATH, function(err, data) {
+    fs.readFile(USER_PATH, function (err, data) {
       if (!err) {
         try {
           var obj = JSON.parse(data);
@@ -260,7 +260,7 @@ var User = {
   },
 
   //添加用户
-  addUser: async function(req, res) {
+  addUser: async function (req, res) {
     var db_user = new PouchDB(db);
     console.log(req.body);
     var username = req.body.username;
@@ -310,20 +310,24 @@ var User = {
           });
         } else {
           try {
+            let time = new Date().toLocaleString();
             var doc = await db_user.put({
               _id: email,
               username: username,
               email: email,
               password: password,
-              time: new Date(),
-              token: token
+              token: token,
+              reg_time: time,
+              log_time: time,
             });
             return res.send({
               status: 1,
               data: {
                 username: username,
                 email: email,
-                token: token
+                token: token,
+                reg_time: time,
+                log_time: time,
               }
             });
           } catch (err) {
@@ -494,7 +498,7 @@ var User = {
   },
 
   //用户登录
-  login: async function(req, res) {
+  login: async function (req, res) {
     var db_user = new PouchDB(db);
     var email = req.body.email;
     var password = util.md5(req.body.password);
@@ -503,20 +507,26 @@ var User = {
     try {
       var doc = await db_user.get(email);
       if (doc['password'] == password) {
+        let time = new Date().toLocaleString();
         var response = await db_user.put({
           _id: email,
           _rev: doc._rev,
           email: email,
           password: password,
           username: doc['username'],
-          'token': token
+          token: token,
+          reg_time: doc['reg_time'],
+          log_time: time
         });
         return res.send({
           status: 1,
           data: {
             email: email,
             username: doc['username'],
-            token: token
+            token: token,
+            reg_time: doc['reg_time'],
+            log_time: time
+
           }
         });
       } else {
@@ -620,7 +630,7 @@ var User = {
   },
 
   //通过token登录
-  loginByToken: async function(req, res) {
+  loginByToken: async function (req, res) {
     var db_user = new PouchDB(db);
     var token = req.body.token;
     var r_index = await db_user.createIndex({
@@ -685,7 +695,7 @@ var User = {
   },
 
   //用户修改密码
-  updatePassword: function(req, res) {
+  updatePassword: function (req, res) {
     var token = req.body.token;
     var oldPassword = util.md5(req.body.oldPassword);
     var password = util.md5(req.body.password);
@@ -710,7 +720,7 @@ var User = {
   },
 
   //删除用户
-  deleteUser: function(req, res) {
+  deleteUser: function (req, res) {
     var token = req.body.token;
     var email = req.body.email;
 

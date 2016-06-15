@@ -138,6 +138,8 @@ export default class Resume extends Component {
                     'username': user.username,
                     'token': user.token,
                     'email': user.email,
+                    'reg_time': user.reg_time,
+                    'log_time': user.log_time,
                 });
                 this._flash(user);
             } catch (err) {
@@ -232,12 +234,12 @@ export default class Resume extends Component {
             BackAndroid.removeEventListener('hardwareBackPress', () => this._pressButton());
         }
     }
-    
+
     _flash(user) {
         const {navigator} = this.props;
-        if(this.props.Login) {
-                this.props.Login(false,user);
-            }
+        if (this.props.Login) {
+            this.props.Login(false, user);
+        }
         const routers = navigator.getCurrentRoutes();
         console.log(routers);
         if (routers.length > 1) {
@@ -267,27 +269,47 @@ export default class Resume extends Component {
                     <Text style={styles.caption_text}>{this.props.title}</Text>
                 </View>
                 <View style={styles.container}>
-                    <View style={styles.inputRow}>
-                        <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" value={this.state.email} onChangeText={(email) => this.setState({ email }) } />
-                    </View>
+                    {this.props.login_state == true ?
+                        <View style={styles.inputRow}>
+                            <Text>邮　箱</Text><TextInput style={styles.input} placeholder="请输入邮箱" value={this.state.email} onChangeText={(email) => this.setState({ email }) } />
+                        </View> : <View style={styles.inputRow}>
+                            <Text>邮　箱</Text><TextInput style={styles.input} placeholder={this.props.user.email} value={this.props.user.email}  />
+                        </View>
+                    }
                     {this.props.title == '注册' ?
                         <View style={styles.inputRow}>
                             <Text>用户名</Text><TextInput style={styles.input} placeholder="请输入用户名" value={this.state.username} onChangeText={(username) => this.setState({ username }) } />
                         </View> : null
                     }
-                    <View style={styles.inputRow}>
-                        <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} value={this.state.password} onChangeText={(password) => this.setState({ password }) }/>
-                    </View>
+                    {this.props.title == '资料' && this.props.login_state == false  ?
+                        null :
+                        <View style={styles.inputRow}>
+                            <Text>密　码</Text><TextInput style={styles.input} placeholder="请输入密码" password={true} value={this.state.password} onChangeText={(password) => this.setState({ password }) }/>
+                        </View>
+                    }
                     {this.props.title == '注册' ?
                         <View style={styles.inputRow}>
                             <Text>密　码</Text><TextInput style={styles.input} placeholder="请再次输入密码" password={true} value={this.state.re_password} onChangeText={(re_password) => this.setState({ re_password }) }/>
                         </View> : null
                     }
-                    <View>
-                        <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? () => this._reg() : () => this._login() }>
-                            <Text style={{ color: '#fff' }}>{this.props.title}</Text>
-                        </TouchableHighlight>
-                    </View>
+                    {this.props.title == '资料' && this.props.login_state == false ?
+                        <View style={styles.inputRow}>
+                            <Text>注册时间</Text><TextInput style={styles.input} placeholder={this.props.user.reg_time}  value={this.props.user.reg_time}/>
+                        </View> : null
+                    }
+                    {this.props.title == '资料' && this.props.login_state == false ?
+                        <View style={styles.inputRow}>
+                            <Text>上次登录时间</Text><TextInput style={styles.input} placeholder={this.props.user.log_time}  value={this.props.user.log_time}/>
+                        </View> : null
+                    }
+                    {this.props.login_state == true ?
+                        <View>
+                            <TouchableHighlight underlayColor="#fff" style={styles.btn} onPress={this.props.title == '注册' ? () => this._reg() : () => this._login() }>
+                                <Text style={{ color: '#fff' }}>{this.props.title == '资料' ? '登录后查询' : this.props.title}</Text>
+                            </TouchableHighlight>
+                        </View> : null
+                    }
+
                 </View>
             </ScrollView>
         );
