@@ -4,7 +4,8 @@
 'use strict';
 
 import React, {
-    Component, } from 'react';
+    Component,
+} from 'react';
 import {
     Platform,
     StyleSheet,
@@ -24,21 +25,20 @@ import {
     LazyloadImage
 } from 'react-native-lazyload';
 import ViewPager from 'react-native-viewpager';
-import DiscoverCell  from './discover/discover-cell';
+import DiscoverCell from './discover/discover-cell';
 import DiscoverDetail from './discover/discover-detail';
 //import DiscoverData from './discover/discover-data';
-import DiscoverData from "../test/testData";
+//import DiscoverData from "../test/testData";
 import Util from './util.js';
 import Service from './service.js';
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+const ds = new ListView.DataSource({
+    rowHasChanged: (r1, r2) => r1 !== r2
+});
 
 let BANNER_IMGS = [
-  Service.host+'/kankan/'+'h001.jpg',
-  Service.host+'/kankan/'+'h002.jpg',
-  Service.host+'/kankan/'+'h003.jpg',
-  Service.host+'/kankan/'+'h004.jpg',
-  Service.host+'/kankan/'+'h005.jpg',
-  Service.host+'/kankan/'+'h006.jpg',
+    Service.host + '/kankan/' + 'h001.jpg',
+    Service.host + '/kankan/' + 'h002.jpg',
+    Service.host + '/kankan/' + 'h003.jpg',
 ];
 /*
 var BANNER_IMGS = [
@@ -51,7 +51,7 @@ var BANNER_IMGS = [
   'https://images.unsplash.com/photo-1440847899694-90043f91c7f9?h=1024'
 ];
 */
-let _renderPagination = function (index, total, context) {
+let _renderPagination = function(index, total, context) {
     return (
         <View style={styles.pagination_wrapper}>
             <Text style={styles.count}>
@@ -62,50 +62,72 @@ let _renderPagination = function (index, total, context) {
 };
 
 export default class Kankan extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            pagerSource: new ViewPager.DataSource({ pageHasChanged: (p1, p2) => p1 !== p2 })
+            fetch_data: [{
+                img: "/kankan/h001.jpg",
+                subtitle: "     ---防晒7大必知知识",
+                title: " 夏季来了,你防晒了吗?",
+                url: "/kankan/get/h001.md",
+            }],
+            pagerSource: new ViewPager.DataSource({
+                    pageHasChanged: (p1, p2) => p1 !== p2
+                })
                 .cloneWithPages(BANNER_IMGS)
         };
     }
     async componentWillMount() {
         try {
+            const {
+                navigator
+            } = this.props;
+            console.log(navigator);
             let path = Service.host + Service.getkankanList;
             let data = await Util.get_json(path);
             if (data.status) {
                 console.log(data.data)
-                //console.log(data.data.img)
-                
-                function img_source(srcList){
-                    return Service.host +srcList.img;
+                    //console.log(data.data.img)
+
+                function img_source(srcList) {
+                    return Service.host + srcList.img;
                 }
                 console.log(data.data.map(img_source));
                 this.setState({
-                    pagerSource: new ViewPager.DataSource({ pageHasChanged: (p1, p2) => p1 !== p2 })
-                .cloneWithPages(data.data.map(img_source))
+                    fetch_data: data.data,
+                    pagerSource: new ViewPager.DataSource({
+                            pageHasChanged: (p1, p2) => p1 !== p2
+                        })
+                        .cloneWithPages(data.data.map(img_source))
                 });
-                
+
             } else {
-                Alert.alert('出错啦','什么鬼')
+                Alert.alert('出错啦', '什么鬼')
             }
         } catch (err) {
             console.log(err);
-            Alert.alert('出错啦','服务器出小差啦')
+            Alert.alert('出错啦', '服务器出小差啦')
         }
     }
+
     _selectDiscover(discover: Object) {
-        const {navigator} = this.props;
+        //Alert.alert('点击了我','点击')
+        const {
+            navigator
+        } = this.props;
+        console.log(navigator);
         if (navigator) {
             navigator.push({
-                title: discover.title,
+                name: 'DiscoverDetail',
                 component: DiscoverDetail,
-                passProps: { discover: discover }
+                params: {
+                    discover: discover
+                }
             });
         }
     }
 
-    _renderRow(discoverData) {
+    _renderRow = (discoverData) => {
         return (
             <DiscoverCell onSelect={() => this._selectDiscover(discoverData) } discoverData={discoverData} />
         );
@@ -119,6 +141,16 @@ export default class Kankan extends Component {
                 style={styles.page} />
         );
     }
+    _listHeader = (index) => {
+        return (
+            <ViewPager
+                style={{ height: 130 }}
+                renderPage={this._renderPage}
+                isLoop={true}
+                autoPlay={true}
+                dataSource={this.state.pagerSource}/>
+        )
+    };
     /*
     _renderPage(data) {
         return (<Image source={data} style={styles.page} />)
@@ -126,26 +158,18 @@ export default class Kankan extends Component {
     */
 
     render() {
-        const dataSource = ds.cloneWithRows(DiscoverData)
-        let resultList =
-            <LazyloadListView
-                name="listExample"
-                automaticallyAdjustContentInsets={false}
-                dataSource={dataSource}
-                renderRow={this._renderRow}
-                style={styles.listView}
-                />;
-
+        //const dataSource = ds.cloneWithRows(DiscoverData)
+        const dataSource = ds.cloneWithRows(this.state.fetch_data)
         return (
-            <ScrollView style={styles.container}>
-                <ViewPager
-                    style={{ height: 130 }}
-                    renderPage={this._renderPage}
-                    isLoop={true}
-                    autoPlay={true}
-                    dataSource={this.state.pagerSource}/>
-                {resultList}
-            </ScrollView>
+            <View style={styles.container}>
+                <LazyloadListView
+                    name="listExample"
+                    automaticallyAdjustContentInsets={false}
+                    dataSource={dataSource}
+                    renderRow={this._renderRow}
+                    style={styles.listView}
+                    renderHeader={this._listHeader}/>
+            </View>
         );
     }
 }
@@ -162,7 +186,7 @@ const styles = StyleSheet.create({
         right: 10
     },
     listView: {
-        marginTop: 20,
+        marginTop: 0,
         paddingBottom: 64,
         backgroundColor: '#FFF'
     },

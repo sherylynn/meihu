@@ -19,7 +19,12 @@ import {
     LazyloadView,
     LazyloadImage
 } from 'react-native-lazyload';
+import Service from '../service.js';
 export default class DiscoverCell extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
     render() {
         let {discoverData} = this.props;
         let cellView;
@@ -39,14 +44,12 @@ export default class DiscoverCell extends Component {
             </View>
         } else {
             cellView = <View style={{ padding: 10, flexDirection: 'row' }}>
-                <Image style={styles.thumb} source={{ uri: discoverData.logo }}/>
+                <Image style={styles.thumb} source={{ uri: Service.host + discoverData.img }}/>
                 <View style={{ paddingLeft: 10, flex: 1 }}>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.discoverTitle}>{discoverData.title}</Text>
-                        <Text style={{ flex: 1, fontSize: 12, textAlign: 'right' }}>{discoverData.title}</Text>
                     </View>
-                    <Text style={{ marginTop: 7, marginBottom: 8, height: 38, lineHeight: 18 }}>{discoverData.infoTitle}</Text>
-                    <Text style={styles.dateInfo}>{discoverData.info}</Text>
+                    <Text style={{ marginTop: 7,fontSize: 11, marginBottom: 8, height: 38, lineHeight: 18 }}>{discoverData.subtitle}</Text>
                 </View>
             </View>
         }
@@ -69,7 +72,7 @@ export default class DiscoverCell extends Component {
 
 const styles = StyleSheet.create({
     discoverTitle: {
-        flex: 1, fontSize: 12, color: '#999'
+        flex: 1, fontSize: 14, color: '#999'
     },
     dateInfo: {
         fontSize: 12, color: '#999'
