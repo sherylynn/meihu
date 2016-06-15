@@ -2,7 +2,7 @@
  * Created by kenny on 16/3/8.
  */
 'use strict';
-import React,{
+import React, {
     Component,
 } from 'react';
 import {
@@ -16,7 +16,8 @@ import {
     BackAndroid,
     View
 } from 'react-native';
-
+import Util from '../util.js';
+import Service from '../service.js';
 export default class DiscoverDetail extends Component {
     constructor(props) {
         super(props);
@@ -53,6 +54,14 @@ export default class DiscoverDetail extends Component {
                     </TouchableOpacity>
                     <Text style={{ fontSize: 17, flex: 1, textAlign: 'center', marginRight: 30 }}>{discover.title}</Text>
                 </View>
+                <WebView
+                    automaticallyAdjustContentInsets={false}
+                    style={styles.webView}
+                    source={{ uri: Service.host + discover.url }}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    scalesPageToFit={true}
+                    />
             </View>
         )
     };
@@ -63,6 +72,8 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 15,
         marginBottom: 80
+    },
+    webView: {
     },
     largeImage: {
         flex: 1,

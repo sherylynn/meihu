@@ -34,7 +34,7 @@ let ME_PRESS = require('./images/icon_user_pre.png');
 import TabNavigator from 'react-native-tab-navigator';
 import RouteHome from './routehome';
 import Message from './views/message';
-import Kankan from  './views/kankan';
+import Kankan from  './routekankan';
 import RouteMe from './routeme';
 
 //获取服务器上化妆品信息
