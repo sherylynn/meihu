@@ -65,7 +65,7 @@ export default class SplashScreen extends Component {
                     { text: '确定', onPress: () => { info.downloadUrl && Linking.openURL(info.downloadUrl) } },
                 ]);
             } else if (info.upToDate) {
-                Alert.alert('提示', '您的应用版本已是最新.');
+                //Alert.alert('提示', '您的应用版本已是最新.');
             } else {
                 Alert.alert('提示', '检查到新的版本' + info.name + ',是否下载?\n' + info.description, [
                     { text: '是', onPress: () => { this.doUpdate(info) } },
