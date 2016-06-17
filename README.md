@@ -25,7 +25,7 @@ react-native run-ios
 2. 看看部分 `react-native-image-progress` 修复图片载入显示
 3. 聊聊部分 参考 `react-native-gifted-messenger` `react-native-firebase-chat-demo` 的来学习用户聊天信息的数据库储存
 
-
+4. ios 上架 极光推送 ipv6
 
 ### 依赖项：
 ```
