@@ -48,8 +48,7 @@ let BANNER_IMGS = [
 import Resume from './me/resume';
 import Util from './util.js'
 var Service = require('./service.js');
-import PouchDB from 'pouchdb'
-import 'pouchdb-asyncstorage-down'
+import PouchDB from 'pouchdb-react-native';
 const db_remote = new PouchDB(Service['host'] + '/db/users');
 const db_local = new PouchDB('me', { adapter: 'asyncstorage' })
 /*
