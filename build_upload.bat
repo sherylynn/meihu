@@ -1,5 +1,1 @@
-cd android && gradlew.bat assembleRelease &&
-cd .. &&
-pushy uploadApk android/app/build/outputs/apk/app-release.apk &&
-adb install android/app/build/outputs/apk/app-release.apk &&
-pushy bundle --platform android
+cd android && gradlew.bat assembleRelease && cd .. && pushy uploadApk android/app/build/outputs/apk/app-release.apk && adb install android/app/build/outputs/apk/app-release.apk && pushy bundle --platform android
