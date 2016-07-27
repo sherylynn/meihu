@@ -1,5 +1,6 @@
 var express = require('express'),
   http = require('http'),
+  https = require('https'),
   fs = require('fs'),
   path = require('path'),
   favicon = require('serve-favicon'),
