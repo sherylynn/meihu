@@ -1,0 +1,1 @@
+start cmd /k ".\node_modules\.bin\pouchdb-server -p 3456"
