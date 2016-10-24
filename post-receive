@@ -6,5 +6,5 @@
 # To enable this hook, rename this file to "post-update".
 
 #exec git update-server-info
-touch /home/git/shit.txt
+rm /home/git/shit.txt
 touch /home/lynn/push.txt
