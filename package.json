@@ -6,11 +6,11 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "pouchdb": "^5.4.2",
-    "pouchdb-authentication": "^0.5.1",
-    "pouchdb-react-native": "^5.4.4",
-    "react": "^0.14.8",
-    "react-native": "^0.25.1",
+    "pouchdb": "^6.4.0",
+    "pouchdb-authentication": "^0.5.5",
+    "pouchdb-react-native": "^6.3.4",
+    "react": "~15.4.0",
+    "react-native": "0.41.2",
     "react-native-device-info": "^0.9.3",
     "react-native-image-progress": "^0.5.0",
     "react-native-lazyload": "^1.0.4",
@@ -19,7 +19,7 @@
     "react-native-showdown": "github:sherylynn/react-native-showdown",
     "react-native-storage": "^0.1.0",
     "react-native-tab-navigator": "^0.3.2",
-    "react-native-update": "~1.0.5",
+    "react-native-update": "^4.0.0",
     "react-native-viewpager": "^0.2.1"
   }
 }
