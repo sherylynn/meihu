@@ -9,9 +9,9 @@
     "pouchdb": "^6.4.0",
     "pouchdb-authentication": "^0.5.5",
     "pouchdb-react-native": "^6.3.4",
-    "react": "~15.4.0",
-    "react-native": "0.41.2",
-    "react-native-device-info": "^0.9.3",
+    "react": "^16.2.0",
+    "react-native": "^0.53.3",
+    "react-native-device-info": "^0.17.1",
     "react-native-image-progress": "^0.5.0",
     "react-native-lazyload": "^1.0.4",
     "react-native-md-textinput": "^2.0.4",
@@ -19,7 +19,7 @@
     "react-native-showdown": "github:sherylynn/react-native-showdown",
     "react-native-storage": "^0.1.0",
     "react-native-tab-navigator": "^0.3.2",
-    "react-native-update": "^4.0.0",
+    "react-native-update": "^5.0.0",
     "react-native-viewpager": "^0.2.1"
   }
 }
